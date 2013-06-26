@@ -27,27 +27,50 @@
         <title></title>
     </head>
     <body>
-        <div id="ip-container" style="background-color: #ccffff;">
-            <div>hello</div>
-            <div>{{title}}</div>
+        
+        <div id="container">
+            <div data-role="page">
+                <div data-role="header">
+                    <h2>Loading...</h2>
+                </div>
+
+            </div>  
         </div>
-        <script type="text/javascript" src="cordova-2.7.0.js"></script>
+        
+        <!--
+        <script type="text/javascript" src="http://jxp.github.io/phonegap-desktop/demo/phonegap.js"></script>
+        <script type="text/javascript">
+            var WEBMODE = true;
+        </script>
+        -->
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript">
+            var WEBMODE = false;
+        </script>
+
+
         <script src="js/lib/jquery-1.9.1.min.js"></script>
         <script src="js/lib/jquery.mobile-1.3.1.min.js"></script>
-        <script src="js/lib/angular.min.js"></script>
+        <script src="js/lib/mustache.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/core.js"></script>
+        <script type="text/javascript" src="js/view.js"></script>
         <script type="text/javascript" src="js/util.js"></script>
-        <script type="text/javascript" src="modules/wordpressCom/js/wpcom.module.js"></script>
+        <script type="text/javascript" src="modules/wordpressCom/js/wpcom.js"></script>
         <script type="text/javascript" src="js/options.js"></script>
         <script type="text/javascript">
             app.initialize();
             $(document).bind("mobileinit", function () {
                 // Make your jQuery Mobile framework configuration changes here!
-
-                $.mobile.allowCrossDomainPages = true;
+                $.support.cors = true;
+                $.mobile.allowCrossDomainPages = true;                               
             });
             
+            // setup stuff
+            var LOCALPATH = (WEBMODE ? "" : "file://www/");
+            $.ajaxSetup({
+                dataType: WEBMODE ? "jsonp" : "json",
+            });
 
         </script>
     </body>

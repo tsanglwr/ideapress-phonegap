@@ -38,10 +38,12 @@ var app = {
     onDeviceReady: function () {
         util.checkLocalStorageSchemaVersion();
         app.receivedEvent('deviceready');
-        $.support.cors = true;
+        $.ajaxSetup({
+            cache: false,
+            timeout : 60000,
+        });
 
         console.log('Ready...');
-        console.log('NgApp loaded...');
         
         // initialize IdeaPress modules
         if (!ideaPress.initialized) {
@@ -56,8 +58,8 @@ var app = {
 
         console.log('Module rendered...');
         $.when.apply($, promises).then(function () {
-            ideaPress.update();
-
+            // adding some delay for testing
+            window.setTimeout(function() { ideaPress.update(); }, 5000);                            
             console.log('Module updated...');
         });
         

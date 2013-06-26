@@ -1,0 +1,24 @@
+﻿<script id="wpcom-tpl-normal" type="text/html">
+    <ul data-role="listview">
+        {{#posts}}
+        <li>
+            <a href="#" class="wpcom-post-link" rel="{{id}}">
+                <img src="{{imgThumbUrl}}" />
+                <h3 class="ui-li-heading">{{title}}</h3>
+                <p class="ui-li-desc">{{description}}</p>
+            </a>
+        </li>
+        {{/posts}}			
+    </ul>
+</script>
+<script id="wpcom-tpl-post" type="text/html">    
+    <div>
+        <h1>{{title}}</h1>
+        <p>{{{content}}}</p>
+    </div>
+</script>
+<script id="wpcom-tpl-post-header" type="text/html">    
+        <a href="#" data-rel="back" data-role="button" data-icon="arrow-l">back</a>        
+    <div style="height:200px;background-image:url('{{imgThumbUrl}}');background-size:cover;">
+    </div>
+</script>

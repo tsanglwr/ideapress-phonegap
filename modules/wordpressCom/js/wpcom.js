@@ -15,8 +15,9 @@ var wordpresscomModule = function (ideaPress, options) {
     this.categoryId = options.categoryId;
     this.id = options.id;
     this.siteDomain = options.siteDomain;
-    this.container = null;
-    return this;
+    this.pageContainer = null;
+    this.templateName = options.templateName;
+    return this;    
 };
 
 // Constant
@@ -35,19 +36,17 @@ wordpresscomModule.prototype.render = function (elem) {
     ideaPress.showLoader();
 
     self.parentContainer = elem;
-    //$.ajax({url : "file://www/modules/wordpressCom/pages/wpcom.module.html", cache : false, type : "GET"})    
-    //.done(function (html) {
-     
-        //var scope = angular.element('#ip-container').scope();
-        var newPage = $("<div data-role=page id=''><div data-role=header><h1>" + self.title + "</h1></div><div data-role=content class='content'></div></div>");
-
-        //append it to the page container
-        newPage.appendTo($.mobile.pageContainer);
-        newPage.attr('id', 'wp-module-' + self.id);
-        self.container = newPage;
-        $.mobile.changePage(newPage);       
+    // file://www/modules/wordpressCom/pages/wpcom.template.html
+    $.Mustache.load(LOCALPATH + "modules/wordpressCom/pages/wpcom.template.html").done
+    (function () {
+        self.pageContainer = view.addPage('wpcom' + self.id);
+        view.renderHeader(self.pageContainer, "<h1>" + self.title + "</h1>");
+        
+        // setup event handlers
+        $(self.pageContainer).on('click', '.wpcom-post-link', function(e) { self.showPost(this, self);});
+        
         deferred.resolve();
-    //});
+    });
     
     return deferred;
 };
@@ -58,7 +57,7 @@ wordpresscomModule.prototype.update = function (page) {
     if (false !== self.fetching) {
         self.fetching.abort();
     }
-
+    
     if (!page)
         page = 0;
     
@@ -66,13 +65,13 @@ wordpresscomModule.prototype.update = function (page) {
 
     return self.fetch(page).then(function () {
         console.log('fetching done...');
-        var content = self.container.find('.content');
+        var viewData = { posts: [] };
         for (var item in self.list) {
             console.log('item...' + self.list[item].title);
-            content.append($(
-                '<div><h3>' + self.list[item].title + '</h3></div>'
-            ));
+            viewData.posts.push(self.list[item]);
         }
+        var content = $.Mustache.render(self.templateName, viewData);
+        view.renderContent(self.pageContainer, content);
     },
     function (e) {
         alert('failed', e);
@@ -133,7 +132,7 @@ wordpresscomModule.prototype.fetch = function (page) {
         var localStorageObject = self.loadFromStorage();
         if (self.shouldFetch(localStorageObject, page)) {
             console.log("call " + fullUrl);
-            self.fetching = $.ajax({ type: 'GET', url: fullUrl, headers: headers }).then(function (r) {
+            self.fetching = $.ajax({ type: 'GET', url: fullUrl, headers: headers, cache : false }).then(function (r) {
                 var data = r;
                 if (data.found == undefined || data.found == "0") {
                     self.maxPagingIndex = page;
@@ -157,8 +156,9 @@ wordpresscomModule.prototype.fetch = function (page) {
                     defered.resolve();
                 }
             },
-            function(e) {
-                console.log("call error"  + e);
+            function (e) {
+                for(var i in e)
+                    console.log("call error: "  + i + " " + e[i]);
                 localStorageObject = self.loadFromStorage();
                 if (localStorageObject != null && localStorageObject.posts != null)
                     self.addItemsToList(localStorageObject.posts);
@@ -228,7 +228,22 @@ wordpresscomModule.prototype.saveToStorage = function (data) {
 };
 
 // Navigate to Detail page
-wordpresscomModule.prototype.showPost = function (e) {
+wordpresscomModule.prototype.showPost = function (e, module) {
+    var id = $(e).attr('rel');
+    var post = null;
+    for (var i in module.list) {
+        if (module.list[i].id == id)
+            post = module.list[i];
+    }
+    var p = view.addPage('wpcom-post-' + post.id);
+    view.gotoPage(p);
+
+    console.log('show...' + post.title);
+
+    var content = $.Mustache.render("wpcom-tpl-post", post);
+    var header = $.Mustache.render("wpcom-tpl-post-header", post);
+    view.renderHeader(p, header);
+    view.renderContent(p, content);
 };
 
 
@@ -463,7 +478,7 @@ wordpresscomModule.prototype.getComments = function (postId, c, r, p) {
     var fullUrl = this.apiURL + queryString;
     var headers = { "User-Agent": this.userAgent };
 
-    self.fetching = $.ajax({ type: 'GET', url: fullUrl, headers: headers }).done(
+    self.fetching = $({ type: 'GET', url: fullUrl, headers: headers }).done(
         function (result) {
             var data = JSON.parse(result.responseText);
             c(data);
