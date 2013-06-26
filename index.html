@@ -38,14 +38,31 @@
         </div>
         
         <!--
-        <script type="text/javascript" src="http://jxp.github.io/phonegap-desktop/demo/phonegap.js"></script>
-        <script type="text/javascript">
+            <script type="text/javascript" src="http://jxp.github.io/phonegap-desktop/demo/phonegap.js"></script>
+            <script type="text/javascript">
             var WEBMODE = true;
         </script>
-        -->
+            -->
+    <!--
         <script type="text/javascript" src="cordova.js"></script>
+        -->
         <script type="text/javascript">
             var WEBMODE = false;
+            var LOCALPATH = "";
+            if (window.location.href.indexOf("localhost") > -1 || window.location.href.indexOf("azurewebsites.net") > -1) {
+                WEBMODE = true;
+            }
+
+
+            // setup stuff
+            if (WEBMODE) {
+                document.write("<script  type='text/javascript' src='cordova.shim.js'><\/script>");
+            }
+            else {
+                LOCALPATH = "file://www/";
+                document.write("<script  type='text/javascript' src='cordova.js'><\/script>");
+            }
+
         </script>
 
 
@@ -66,12 +83,17 @@
                 $.mobile.allowCrossDomainPages = true;                               
             });
             
-            // setup stuff
-            var LOCALPATH = (WEBMODE ? "" : "file://www/");
-            $.ajaxSetup({
-                dataType: WEBMODE ? "jsonp" : "json",
-            });
+            if (WEBMODE) {
 
+                $.ajaxSetup({
+                    dataType: "jsonp",
+                });
+            }
+            else {
+                $.ajaxSetup({
+                    dataType: "json",
+                });
+            }
         </script>
     </body>
 </html>
