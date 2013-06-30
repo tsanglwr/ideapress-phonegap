@@ -1,35 +1,43 @@
-﻿/* Import rules for GridView templates */
-@import url('templates/rectangle.css');
+﻿/* 480x800px */
 
-/* @import url('templates/large.css'); */
-/* @import url('templates/wide.css'); */
-
-.wpc-title-count {
-    font-size: 11pt !important;
+/* wpc-tpl-0 */
+.wpc-tpl-0 .wpc-hub-title {
+    
+}
+.wpc-tpl-0 .wpc-hub-li, .wpc-hub-ul {
 }
 
 
-@media screen and (-ms-view-state: snapped) {    
-    .wpc-list .wpc-item {
-        height: 220px;
-        width: 100%;
-        -ms-grid-rows: 160px 60px;
-    }
+.wpc-tpl-0 .wpc-hub-li {
+    padding: 10px;
+    height: 220px;
+}
 
-    .wpc-list .wpc-item .wpc-image-container .wpc-image{
-        height:160px;
-    }   
+.wpc-tpl-0 .wpc-hub-li h4 {
+    font-size: 120%;
+    padding-top: 150px;
+}
+.wpc-tpl-0.wpc-tpl-0-hub-a .wpc-hub-li {
+    padding: 0px;
+    height: 220px;
+    width: 100%;
+}
 
-    .wpc-list .win-vertical .win-item {
-        width: 100%;
-    }
-    .wpc-list .win-vertical .win-item .wpc-image-container .wpc-image {
-        width: 100%;
-    }
-        .wpc-list .win-vertical .win-item {
-        width: 100%;
-    }
-    .wpc-list .win-vertical .win-item .wpc-image-container .wpc-image {
-        width: 100%;
-    }
+.wpc-tpl-0.wpc-tpl-0-hub-b .wpc-post-hub-div-2 {
+    padding: 0px;
+    width: 50%;
+    float: left;
+    height: 220px;
+}
+
+.wpc-tpl-0.wpc-tpl-0-hub-b .wpc-post-hub-div-2:first-child {
+    padding: 0px;
+    width: 100%;
+    float: left;
+    height: 220px;
+}
+.wpc-tpl-0.wpc-tpl-0-hub-b .wpc-post-hub-div-2 h4 {
+    padding: 10px;
+    width: 50%;
+    font-size: 90%;
 }

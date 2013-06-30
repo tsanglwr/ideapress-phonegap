@@ -1,24 +1,44 @@
-﻿<script id="wpcom-tpl-normal" type="text/html">
+﻿<script id="wpc-tpl-0-hub-a" type="text/html">
+    <h2 class="wpc-hub-title">{{title}}</h2>
+    <ul class="wpc-hub-ul" data-role="listview">
+        {{#posts}}
+        <li class="wpc-hub-li" style="background-image:url('{{imgThumbUrl}}');background-size:cover;" class="wpc-post-li" rel="{{id}}">
+            <h4>{{title}}</h4>
+        </li>
+        {{/posts}}			
+    </ul>
+</script>
+<script id="wpc-tpl-0-hub-b" type="text/html">
+    <h2 class="wpc-hub-title">{{title}}</h2>
+    <ul data-role="listview">
+        {{#posts}}
+            <div style="background-image:url('{{imgThumbUrl}}');background-size:cover;" class="wpc-post-hub-div-2" rel="{{id}}">
+                <h4>{{title}}</h4>
+            </div>
+        {{/posts}}			
+    </ul>
+</script>
+<script id="wpc-tpl-0-list" type="text/html">
     <ul data-role="listview">
         {{#posts}}
         <li>
-            <a href="#" class="wpcom-post-link" rel="{{id}}">
+            <a href="#" class="wpc-post-link" rel="{{id}}">
                 <img src="{{imgThumbUrl}}" />
-                <h3 class="ui-li-heading">{{title}}</h3>
-                <p class="ui-li-desc">{{description}}</p>
+                <h3>{{title}}</h3>
+                <p>{{description}}</p>
             </a>
         </li>
         {{/posts}}			
     </ul>
 </script>
-<script id="wpcom-tpl-post" type="text/html">    
+<script id="wpc-tpl-0-post-content" type="text/html">    
     <div>
         <h1>{{title}}</h1>
         <p>{{{content}}}</p>
     </div>
 </script>
-<script id="wpcom-tpl-post-header" type="text/html">    
-        <a href="#" data-rel="back" data-role="button" data-icon="arrow-l">back</a>        
-    <div style="height:200px;background-image:url('{{imgThumbUrl}}');background-size:cover;">
+<script id="wpc-tpl-0-post-header" type="text/html">    
+    <a href="#" data-rel="back" data-role="button" data-icon="arrow-l">back</a>        
+    <div style="height:200px;background-image:url('{{imgUrl}}');background-size:cover;">
     </div>
 </script>

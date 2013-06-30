@@ -44,23 +44,21 @@ var app = {
         });
 
         console.log('Ready...');
-        
+
+        var promises = [];
         // initialize IdeaPress modules
         if (!ideaPress.initialized) {
-            ideaPress.initModules();
+            promises = ideaPress.initModules();
             ideaPress.initialized = true;
         }
         console.log('Modules init-ed...');
-
-        var elem = $('#ip-container');
-
-        var promises = ideaPress.renderModules(elem);
-
-        console.log('Module rendered...');
-        $.when.apply($, promises).then(function () {
-            // adding some delay for testing
-            window.setTimeout(function() { ideaPress.update(); }, 5000);                            
-            console.log('Module updated...');
+        
+        $.when.apply($, promises).done(function () {
+            promises = ideaPress.renderModules();
+            $.when.apply($, promises).done(function () {
+                ideaPress.hub.navigateTo();
+                console.log('Module rendered...');
+            });
         });
         
     },

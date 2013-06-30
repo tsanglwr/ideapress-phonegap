@@ -3,6 +3,7 @@ IdeaPress Wordpress.COM API module
 Author: IdeaNotion
 */
 var wordpresscomModule = function (ideaPress, options) {
+    this.templtePrefix = "wpc";
     this.ideaPress = ideaPress;
     this.list = [];
     this.localStorageBookmarkKey = "wpcom-bookmark";
@@ -11,12 +12,14 @@ var wordpresscomModule = function (ideaPress, options) {
     this.userAgent = navigator.userAgent;
     this.title = options.title;
     this.pageSize = 8;
+    this.hubSize = options.hubSize;
     this.typeId = options.typeId;
     this.categoryId = options.categoryId;
     this.id = options.id;
     this.siteDomain = options.siteDomain;
     this.pageContainer = null;
     this.templateName = options.templateName;
+    this.hubType = options.hubType;
     return this;    
 };
 
@@ -26,28 +29,47 @@ wordpresscomModule.MOSTRECENT = 1;
 wordpresscomModule.CATEGORY = 2;
 wordpresscomModule.BOOKMARKS = 3;
 
+wordpresscomModule.initialized = false;
+
 /* 
 ============================================================================     External Methods     =============================================================//
 */
-// Render main section with html
-wordpresscomModule.prototype.render = function (elem) {
-    var self = this;
+// load templates
+wordpresscomModule.prototype.initialize = function (elem) {
     var deferred = new $.Deferred();
-    ideaPress.showLoader();
-
-    self.parentContainer = elem;
-    // file://www/modules/wordpressCom/pages/wpcom.template.html
-    $.Mustache.load(LOCALPATH + "modules/wordpressCom/pages/wpcom.template.html").done
-    (function () {
-        self.pageContainer = view.addPage('wpcom' + self.id);
-        view.renderHeader(self.pageContainer, "<h1>" + self.title + "</h1>");
-        
-        // setup event handlers
-        $(self.pageContainer).on('click', '.wpcom-post-link', function(e) { self.showPost(this, self);});
-        
+    if (!wordpresscomModule.initialized) {
+        // file://www/modules/wordpressCom/pages/wpcom.template.html
+        $.Mustache.load(LOCALPATH + "modules/wordpressCom/pages/wpcom.template.html").done(function() {
+            deferred.resolve();
+        }).fail(function () {
+            deferred.reject();
+        });
+        wordpresscomModule.initialized = true;
+    } else {
         deferred.resolve();
-    });
+    }
+    return deferred;
+};
+
+wordpresscomModule.prototype.render = function(hub) {
+    var self = this;
+    var deferred = new $.Deferred();   
+
+    self.hubContainer = hub.createSection("wpc-hub-section-" + self.id, self.templateName + " " + self.templateName + "-hub-" + self.hubType);
     
+    self.fetch(0).then(function() {
+        var viewData = { posts: [], title: self.title };
+        for (var i = 0 ; i < Math.min(self.hubSize, self.list.length); i ++) {
+            viewData.posts.push(self.list[i]);
+        }
+        var content = $($.Mustache.render(self.templateName + "-hub-" + self.hubType, viewData));
+        // setup event handlers
+        $(content).on('click', '.wpc-post-link', function (e) { self.showPost(this, self); });
+        self.hubContainer.html(content);
+        deferred.resolve();
+    }).fail(function () {
+        deferred.reject();
+    });
     return deferred;
 };
 
@@ -63,7 +85,7 @@ wordpresscomModule.prototype.update = function (page) {
     
     console.log('fetching ajax...');
 
-    return self.fetch(page).then(function () {
+    return self.fetch(page).done(function () {
         console.log('fetching done...');
         var viewData = { posts: [] };
         for (var item in self.list) {
@@ -71,7 +93,7 @@ wordpresscomModule.prototype.update = function (page) {
             viewData.posts.push(self.list[item]);
         }
         var content = $.Mustache.render(self.templateName, viewData);
-        view.renderContent(self.pageContainer, content);
+        //view.appendContent(self.pageContainer, content);
     },
     function (e) {
         alert('failed', e);
@@ -235,15 +257,26 @@ wordpresscomModule.prototype.showPost = function (e, module) {
         if (module.list[i].id == id)
             post = module.list[i];
     }
-    var p = view.addPage('wpcom-post-' + post.id);
-    view.gotoPage(p);
+    var p = view.createPage('wpcom-post-' + post.id);
+    p.navigateTo();
 
     console.log('show...' + post.title);
 
     var content = $.Mustache.render("wpcom-tpl-post", post);
     var header = $.Mustache.render("wpcom-tpl-post-header", post);
-    view.renderHeader(p, header);
-    view.renderContent(p, content);
+    //view.renderHeader(p, header);
+    //view.renderContent(p, content);
+};
+
+wordpresscomModule.prototype.showCategory = function (e, module) {
+    var self = this;
+
+    self.parentContainer = elem;
+    self.pageContainer = view.createPage('wpcom' + self.id);
+    //view.renderHeader(self.pageContainer, "<h1>" + self.title + "</h1>");
+
+    // setup event handlers
+    $(self.pageContainer).on('click', '.wpc-post-link', function (e) { self.showPost(this, self); });
 };
 
 
@@ -478,7 +511,7 @@ wordpresscomModule.prototype.getComments = function (postId, c, r, p) {
     var fullUrl = this.apiURL + queryString;
     var headers = { "User-Agent": this.userAgent };
 
-    self.fetching = $({ type: 'GET', url: fullUrl, headers: headers }).done(
+    self.fetching = $({ type: 'GET', url: fullUrl, headers: headers }).then(
         function (result) {
             var data = JSON.parse(result.responseText);
             c(data);
