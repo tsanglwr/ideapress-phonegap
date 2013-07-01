@@ -46,10 +46,11 @@ var ideaPress = function () {
         // Call each module to render its content on hub.html
         renderModules: function () {
             var promises = [];
-            this.hub = view.createPage("ip-hub");
+            this.hub = view.createPage("ip-hub", this.modules[0].templateName);
             this.hub.appendHeader("<h1>" + this.options.appTitle + "</h1>" );
-            for (var i in this.modules) {               
-                promises.push(this.modules[i].render(this.hub));
+            for (var i in this.modules) {
+                if (this.modules[i].showHub)
+                    promises.push(this.modules[i].render(this.hub));
             }
             return promises;
         },

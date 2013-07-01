@@ -18,11 +18,11 @@ var view = function() {
              </div>
          </div>  
         */
-        createPage: function(id) {
+        createPage: function(id, cssName) {
             var page = $(
                 "<div data-role='page' data-url='" + id + "' id='" + id + "'>" +
-                    "<div data-role='header'></div>" +
-                    "<div data-role='content'></div>" +
+                    "<div data-role='header'><div id='logo-div'><img id='logo-img' src='css/images/logo.png' /></div></div>" +
+                    "<div data-role='content' id='ip-hub-content'></div>" +
 /*                    "<div data-role='footer'>" +
                     "<div data-role='navbar' data-iconpos='top'  data-id='navbar' data-position='fixed'><ul>" +            
 			        "<li><a href='#' data-icon='home'>Home</a></li>" +
@@ -31,6 +31,8 @@ var view = function() {
                     "</ul></div>" +*/
                     "</div>" + //
                     "</div>");
+            if (cssName)
+                page.addClass(cssName);
             page.navigateTo = function (effect) {                
                 $.mobile.changePage($(this), {
                         allowSamePageTransition: true,

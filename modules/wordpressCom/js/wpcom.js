@@ -20,6 +20,7 @@ var wordpresscomModule = function (ideaPress, options) {
     this.pageContainer = null;
     this.templateName = options.templateName;
     this.hubType = options.hubType;
+    this.showHub = options.showHub;
     return this;    
 };
 
@@ -55,17 +56,18 @@ wordpresscomModule.prototype.render = function(hub) {
     var self = this;
     var deferred = new $.Deferred();   
 
-    self.hubContainer = hub.createSection("wpc-hub-section-" + self.id, self.templateName + " " + self.templateName + "-hub-" + self.hubType);
+    self.hubContainer = hub.createSection("wpc-hub-section-" + self.id, self.templateName + "-hub-" + self.hubType);
     
     self.fetch(0).then(function() {
-        var viewData = { posts: [], title: self.title };
+        var viewData = { posts: [], title: self.title, id : self.id};
         for (var i = 0 ; i < Math.min(self.hubSize, self.list.length); i ++) {
             viewData.posts.push(self.list[i]);
         }
         var content = $($.Mustache.render(self.templateName + "-hub-" + self.hubType, viewData));
         // setup event handlers
-        $(content).on('click', '.wpc-post-link', function (e) { self.showPost(this, self); });
         self.hubContainer.html(content);
+        $(self.hubContainer).on('click', '.wpc-hub-title', function (e) { self.showCategory(this, self); });
+        $(self.hubContainer).on('click', '.wpc-post-div', function (e) { self.showPost(this, self); });
         deferred.resolve();
     }).fail(function () {
         deferred.reject();
@@ -257,26 +259,36 @@ wordpresscomModule.prototype.showPost = function (e, module) {
         if (module.list[i].id == id)
             post = module.list[i];
     }
-    var p = view.createPage('wpcom-post-' + post.id);
-    p.navigateTo();
+    var p = view.createPage('wpc-post-' + post.id, module.templateName);
 
     console.log('show...' + post.title);
 
-    var content = $.Mustache.render("wpcom-tpl-post", post);
-    var header = $.Mustache.render("wpcom-tpl-post-header", post);
-    //view.renderHeader(p, header);
-    //view.renderContent(p, content);
+    var content = $.Mustache.render(this.templateName + "-post-content", post);
+    var header = $.Mustache.render(this.templateName + "-post-header", post);
+    p.appendHeader(header);
+    p.appendContent(content);
+    p.navigateTo();
+
 };
 
 wordpresscomModule.prototype.showCategory = function (e, module) {
-    var self = this;
+    var id = $(e).attr('rel');
+    
+    var p = view.createPage('wpc-module-' + module.id, module.templateName);
 
-    self.parentContainer = elem;
-    self.pageContainer = view.createPage('wpcom' + self.id);
-    //view.renderHeader(self.pageContainer, "<h1>" + self.title + "</h1>");
+    console.log('show category...' + module.title);
+    var viewData = { posts: [], title: module.title, id: module.id };
+    for (var i = 0 ; i < module.list.length; i++) {
+        viewData.posts.push(module.list[i]);
+    }
 
-    // setup event handlers
-    $(self.pageContainer).on('click', '.wpc-post-link', function (e) { self.showPost(this, self); });
+    var content = $.Mustache.render(this.templateName + "-list", viewData);
+    
+    p.appendContent(content);    
+    p.appendHeader("<h1>" + module.title + "</h1>");
+    $(p).on('click', '.wpc-post-div', function (e) { module.showPost(this, module); });
+    p.navigateTo();
+
 };
 
 
@@ -400,13 +412,9 @@ wordpresscomModule.prototype.convertItem = function (item, type) {
         authorName: item.author.name,
         comments: item.comments
     };
-    
-    //var div = $("div");
-    ////div.innerHTML = item.content;
-    //$(div).html(res.content);
 
 
-    //res.description = div.textContent || div.innerText || "";
+    res.description = res.title;
 
     if (res.description) {
         if (res.description.length > 180) {

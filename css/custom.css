@@ -1,0 +1,15 @@
+.wpc-hub-title, .wpc-post-title , .wpc-post-subtitle {
+    color: #fff;
+    text-shadow: 2px 2px #888888;
+}
+
+.wpc-hub-title {
+    color: #999;
+    text-shadow: 2px 2px #fff;
+    padding: 4px 0px 2px;
+}
+
+.wpc-post-div {
+    background-color: #ccc;
+    border-top: solid 2px #666;
+}

@@ -9,8 +9,9 @@
         hubPage : true,
         menu: 'left',
         modules: [
-             { name: wordpresscomModule, options: { id: 1, siteDomain: 'tctechcrunch2011.wordpress.com', title: "Recent News", typeId: wordpresscomModule.MOSTRECENT, showHub: true, hubSize: 1, templateName: "wpc-tpl-0", hubType : "a" } }
-            , { name: wordpresscomModule, options: { id: 2, siteDomain: 'tctechcrunch2011.wordpress.com', title: "Startups", typeId: wordpresscomModule.CATEGORY, categoryId: "Startups", showHub: true, hubSize: 3, templateName: "wpc-tpl-0", hubType: "b" } }
+             { name: wordpresscomModule, options: { id: 1, siteDomain: 'tctechcrunch2011.wordpress.com', title: "Recent News", typeId: wordpresscomModule.MOSTRECENT, showHub: true, hubSize: 1, templateName: "wpc-tpl-1", hubType : "a" } }
+            , { name: wordpresscomModule, options: { id: 2, siteDomain: 'tctechcrunch2011.wordpress.com', title: "Startups", typeId: wordpresscomModule.CATEGORY, categoryId: "Startups", showHub: true, hubSize: 3, templateName: "wpc-tpl-1", hubType: "a" } }
+            , { name: wordpresscomModule, options: { id: 3, siteDomain: 'tctechcrunch2011.wordpress.com', title: "Mobile", typeId: wordpresscomModule.CATEGORY, categoryId: "Mobile", showHub: true, hubSize: 3, templateName: "wpc-tpl-1", hubType: "a" } }
         ],
     };
 })();
