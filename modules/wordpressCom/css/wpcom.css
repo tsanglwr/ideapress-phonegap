@@ -23,36 +23,38 @@
     float: right;
 }
 
-.wpc-tpl-0 .wpc-tpl-0-hub-a .wpc-post-div .wpc-post-title {
+.wpc-tpl-0 .wpc-tpl-0-hub:first-child .wpc-post-div .wpc-post-title {
     font-size: 120%;
     position: relative;
     top: 140px;
     left: 20px;
 }
-.wpc-tpl-0 .wpc-tpl-0-hub-a .wpc-post-div .wpc-post-subtitle {
+.wpc-tpl-0 .wpc-tpl-0-hub:first-child .wpc-post-div .wpc-post-subtitle {
     font-size: 100%;
     position: relative;
     top: 140px;
     left: 20px;
 }
-.wpc-tpl-0 .wpc-tpl-0-hub-b .wpc-post-div {
+.wpc-tpl-0 .wpc-tpl-0-hub:not(:first-child) .wpc-post-div {
     float: left;
     width: 49.5%;
 }
-
-.wpc-tpl-0 .wpc-tpl-0-hub-b .wpc-post-div:first-child {
+.wpc-tpl-0 .wpc-tpl-0-hub:not(:first-child) .wpc-post-div .wpc-post-subtitle {
+    display: none;
+}
+.wpc-tpl-0 .wpc-tpl-0-hub:not(:first-child) .wpc-post-div:first-child {
     width: 100%;
     float: left;
 }
 
-.wpc-tpl-0 .wpc-tpl-0-hub-b .wpc-post-div:first-child .wpc-post-title {
+.wpc-tpl-0 .wpc-tpl-0-hub:not(:first-child) .wpc-post-div:first-child .wpc-post-title {
     font-size: 120%;
     position: relative;
     top: 160px;
     left: 10px;
 }
 
-.wpc-tpl-0 .wpc-tpl-0-hub-b .wpc-post-div:not(:first-child) .wpc-post-title {
+.wpc-tpl-0 .wpc-tpl-0-hub:not(:first-child) .wpc-post-div:not(:first-child) .wpc-post-title {
     font-size: 90%;
     position: relative;
     top: 140px;

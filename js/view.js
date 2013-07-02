@@ -44,10 +44,10 @@ var view = function() {
             page.appendContent = function(content) {
                 $(page).find('[data-role=content]').append(content);
             };
-            page.createSection = function (divId, cssName) {
+            page.createSection = function (divId, clsName) {
                 var section = $("<div></div>");
                 section.attr('id', divId);
-                section.addClass(cssName);
+                section.addClass(clsName);
                 $(page).find('[data-role=content]').append(section);
                 return section;
             };

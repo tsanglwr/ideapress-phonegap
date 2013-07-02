@@ -56,14 +56,14 @@ wordpresscomModule.prototype.render = function(hub) {
     var self = this;
     var deferred = new $.Deferred();   
 
-    self.hubContainer = hub.createSection("wpc-hub-section-" + self.id, self.templateName + "-hub-" + self.hubType);
+    self.hubContainer = hub.createSection("wpc-hub-section-" + self.id, self.templateName + "-hub");
     
     self.fetch(0).then(function() {
         var viewData = { posts: [], title: self.title, id : self.id};
         for (var i = 0 ; i < Math.min(self.hubSize, self.list.length); i ++) {
             viewData.posts.push(self.list[i]);
         }
-        var content = $($.Mustache.render(self.templateName + "-hub-" + self.hubType, viewData));
+        var content = $($.Mustache.render(self.templateName + "-hub", viewData));
         // setup event handlers
         self.hubContainer.html(content);
         $(self.hubContainer).on('click', '.wpc-hub-title', function (e) { self.showCategory(this, self); });
