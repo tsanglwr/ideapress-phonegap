@@ -6,56 +6,40 @@ Description: Control and maintain core logics of the application
 */
 var view = function() {
     var instance = {
-        /*
-          <div data-role="page">
-          <div data-theme="b" data-role="header">
-                <h2></h2>
-          </div>
-          <div data-theme="b" id='pageContent' data-role="content">
-          </div>
-             <div data-theme="b" data-role="footer">
-                 <h2></h2>
-             </div>
-         </div>  
-        */
-        createPage: function(id, cssName) {
-            var page = $(
-                "<div data-role='page' data-url='" + id + "' id='" + id + "'>" +
-                    "<div data-role='header'><div id='logo-div'><img id='logo-img' src='css/images/logo.png' /></div></div>" +
-                    "<div data-role='content' id='ip-hub-content'></div>" +
-/*                    "<div data-role='footer'>" +
-                    "<div data-role='navbar' data-iconpos='top'  data-id='navbar' data-position='fixed'><ul>" +            
-			        "<li><a href='#' data-icon='home'>Home</a></li>" +
-			        "<li><a href='#' data-icon='star'>Bookmark</a></li>" +
-			        "<li><a href='#' data-icon='search'>Search</a></li>" +
-                    "</ul></div>" +*/
-                    "</div>" + //
-                    "</div>");
-            if (cssName)
-                page.addClass(cssName);
-            page.navigateTo = function (effect) {                
-                $.mobile.changePage($(this), {
-                        allowSamePageTransition: true,
-                        transition: effect ? effect : "flip",
-                    }
-                );
-                $(this).trigger("pagecreate");
+
+        createPage: function(id, cssName, title) {
+            var page = $("<div id='" + id + "' class='content'></div>");
+            page.cssName = cssName;
+            if ($('#content #' + page.attr('id')).length == 0) {
+                $.ui.addContentDiv("#" + page.attr('id'), page.html(), "");
+            }
+
+            
+            page.navigateTo = function (effect) {                               
+                if (!effect)
+                    effect = "slide";
+
+                $.ui.updatePanel("#" + page.attr('id'), page.html());
+                $('#content #' + page.attr('id')).addClass(page.cssName);
+                $.ui.loadContent('#' + page.attr('id'), true, true, effect);
+                if (title)
+                    $.ui.setTitle(title);
+                $.ui.toggleNavMenu(false);
             };
-            page.appendContent = function(content) {
-                $(page).find('[data-role=content]').append(content);
+            page.appendContent = function (content) {
+                page.append(content);
             };
             page.createSection = function (divId, clsName) {
                 var section = $("<div></div>");
                 section.attr('id', divId);
                 section.addClass(clsName);
-                $(page).find('[data-role=content]').append(section);
+                $(page).append(section);
                 return section;
             };
             page.appendHeader = function (content) {
-                $(page).find('[data-role=header]').append(content);
+                //$(page).find('[data-role=header]').append(content);
             };
 
-            $('#container').append(page);
             return page;
         },
     };

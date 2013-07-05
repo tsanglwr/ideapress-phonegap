@@ -38,13 +38,14 @@ var app = {
     onDeviceReady: function () {
         util.checkLocalStorageSchemaVersion();
         app.receivedEvent('deviceready');
-        $.ajaxSetup({
-            cache: false,
-            timeout : 60000,
-        });
-
+        $.ajaxSettings.cache = false;
+        $.ajaxSettings.timeout = 60000;
+        $.ajaxSettings.crossDomain = true;
+        $.ui.removeFooterMenu();
+        $.ui.backButtonText = "";
+        
         console.log('Ready...');
-
+        
         var promises = [];
         // initialize IdeaPress modules
         if (!ideaPress.initialized) {
@@ -53,13 +54,14 @@ var app = {
         }
         console.log('Modules init-ed...');
         
-        $.when.apply($, promises).done(function () {
+        RSVP.all(promises).then(function () {
             promises = ideaPress.renderModules();
-            $.when.apply($, promises).done(function () {
+            RSVP.all(promises).then(function () {
                 ideaPress.hub.navigateTo();
                 console.log('Module rendered...');
             });
         });
+        
         
     },
     // Update DOM on a Received Event

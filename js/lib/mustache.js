@@ -57,7 +57,8 @@
             $.error('TemplateName: ' + templateName + ' is already mapped.');
             return;
         }
-        templateMap[templateName] = $.trim(templateHtml);
+        // replace jquery trim with string.trim
+        templateMap[templateName] = templateHtml.trim();
     }
 
     /**
@@ -137,17 +138,25 @@
 	 * @returns				jQuery deferred promise which will complete when the templates have been loaded and are
 	 *						ready for use.
 	 */
-    function load(url, onComplete) {
-        return $.ajax({
+    // RAYMOND TSANG: modifying the call to use RSVP promise object
+    function load(url, onComplete, onFailure) {
+        $.ajax({
             url: url,
-            dataType: options.externalTemplateDataType
-        }).done(function (templates) {
-            $(templates).filter('script').each(function (i, el) {
-                add(el.id, $(el).html());
-            });
+            dataType: options.externalTemplateDataType,
+            success: function(templates) {
+                $(templates).filter('script').each(function(i, el) {
+                    add(el.id, $(el).html());
+                });
 
-            if ($.isFunction(onComplete)) {
-                onComplete();
+                if ($.isFunction(onComplete)) {
+                    onComplete();
+                }
+            },
+            error: function () {
+
+                if ($.isFunction(onFailure)) {
+                    onFailure();
+                }
             }
         });
     }
@@ -211,7 +220,7 @@
         });
     };
 
-}(jQuery, window));
+}(jq, window));
 
 /*!
  * mustache.js - Logic-less {{mustache}} templates with JavaScript

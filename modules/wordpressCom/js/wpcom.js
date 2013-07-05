@@ -37,42 +37,54 @@ wordpresscomModule.initialized = false;
 */
 // load templates
 wordpresscomModule.prototype.initialize = function (elem) {
-    var deferred = new $.Deferred();
+    var self = this;
+    console.log("wpc.initialize() [" + self.id + "]: Enter");
+
+    var promise = new RSVP.Promise();
     if (!wordpresscomModule.initialized) {
         // file://www/modules/wordpressCom/pages/wpcom.template.html
-        $.Mustache.load(LOCALPATH + "modules/wordpressCom/pages/wpcom.template.html").done(function() {
-            deferred.resolve();
-        }).fail(function () {
-            deferred.reject();
-        });
+        console.log("wpc.initialize(): loading " + LOCALPATH + "modules/wordpressCom/pages/wpcom.template.html");
+
+        $.Mustache.load(LOCALPATH + "modules/wordpressCom/pages/wpcom.template.html", function() {
+            console.log("wpc.initialize() [" + self.id + "]: Ajax Resolve");
+            promise.resolve();
+        },
+            function() {
+                console.log("wpc.initialize() [" + self.id + "]: Ajax Reject");
+                promise.reject();
+            });
+        
         wordpresscomModule.initialized = true;
     } else {
-        deferred.resolve();
+        console.log("wpc.initialize() [" + self.id + "]: Resolve");
+        promise.resolve();
     }
-    return deferred;
+    
+    console.log("wpc.initialize() [" + self.id + "]: Exit");
+    return promise;
 };
 
 wordpresscomModule.prototype.render = function(hub) {
     var self = this;
-    var deferred = new $.Deferred();   
-
+    var promise = new RSVP.Promise();
     self.hubContainer = hub.createSection("wpc-hub-section-" + self.id, self.templateName + "-hub");
-    
+    self.hubContainer.addClass("wpc-hub-div");
+
     self.fetch(0).then(function() {
-        var viewData = { posts: [], title: self.title, id : self.id};
-        for (var i = 0 ; i < Math.min(self.hubSize, self.list.length); i ++) {
+        var viewData = { posts: [], title: self.title, id: self.id };
+        for (var i = 0; i < Math.min(self.hubSize, self.list.length); i++) {
             viewData.posts.push(self.list[i]);
         }
-        var content = $($.Mustache.render(self.templateName + "-hub", viewData));
+        var content = $.Mustache.render(self.templateName + "-hub", viewData);
         // setup event handlers
         self.hubContainer.html(content);
-        $(self.hubContainer).on('click', '.wpc-hub-title', function (e) { self.showCategory(this, self); });
-        $(self.hubContainer).on('click', '.wpc-post-div', function (e) { self.showPost(this, self); });
-        deferred.resolve();
-    }).fail(function () {
-        deferred.reject();
+        $('#content #ip-hub').on('click', "#wpc-hub-section-" + self.id + ' .wpc-hub-title', function(e) { self.showCategory(this, self); });
+        $('#content #ip-hub').on('click', "#wpc-hub-section-" + self.id + ' .wpc-post-div', function(e) { self.showPost(this, self); });
+        promise.resolve();
+    }, function() {
+        promise.reject();
     });
-    return deferred;
+    return promise;
 };
 
 // Fetch data and update UI
@@ -87,7 +99,7 @@ wordpresscomModule.prototype.update = function (page) {
     
     console.log('fetching ajax...');
 
-    return self.fetch(page).done(function () {
+    return self.fetch(page).then(function () {
         console.log('fetching done...');
         var viewData = { posts: [] };
         for (var item in self.list) {
@@ -121,15 +133,14 @@ wordpresscomModule.prototype.cancel = function () {
 // Fetch pages, posts or bookmarks
 wordpresscomModule.prototype.fetch = function (page) {
     var self = this;
-    var defered = new $.Deferred();
-    
+    var promise = new RSVP.Promise();
+
     var url = self.apiURL;
     var queryString;
 
-    if (self.typeId == wordpresscomModule.PAGES) {            
-        deferred.resolve();
-    }
-    else if (self.typeId == wordpresscomModule.BOOKMARKS) {
+    if (self.typeId == wordpresscomModule.PAGES) {
+        promise.resolve();
+    } else if (self.typeId == wordpresscomModule.BOOKMARKS) {
         var bookmarks = self.getBookmarks();
         self.post_count = bookmarks.post_count;
         self.lastFetched = bookmarks.lastFetched;
@@ -142,9 +153,8 @@ wordpresscomModule.prototype.fetch = function (page) {
         }
         self.totalCount = bookmarks.posts.length;
 
-        defered.resolve();
-    }
-    else {
+        promise.resolve();
+    } else {
 
         if (self.typeId == wordpresscomModule.MOSTRECENT)
             queryString = 'rest/v1/sites/' + self.siteDomain + '/posts/?number=' + self.pageSize + '&order_by=date&page=' + (page + 1) + "&t=" + new Date().getUTCMilliseconds();
@@ -156,57 +166,61 @@ wordpresscomModule.prototype.fetch = function (page) {
         var localStorageObject = self.loadFromStorage();
         if (self.shouldFetch(localStorageObject, page)) {
             console.log("call " + fullUrl);
-            self.fetching = $.ajax({ type: 'GET', url: fullUrl, headers: headers, cache : false }).then(function (r) {
-                var data = r;
-                if (data.found == undefined || data.found == "0") {
-                    self.maxPagingIndex = page;
-                    defered.resolve();
-                }
-                else {
-                    self.totalCount = data.found;
-                    console.log("call done");
-
-                    if (data.found > 0) {
+            self.fetching = $.ajax({
+                type: 'GET',
+                url: fullUrl,
+                xxx : true,
+                headers: headers,
+                cache: false,
+                success: function(r) {
+                    var data = r;
+                    if (data.found == undefined || data.found == "0") {
                         self.maxPagingIndex = page;
-                        var items = self.addItemsToList(data.posts);
-                        localStorageObject = { 'post_count': self.totalCount, 'posts': [], 'lastFetched': new Date() };
+                        promise.resolve();
+                    } else {
+                        self.totalCount = data.found;
+                        console.log("call done");
 
-                        for (var item in items) {
-                            localStorageObject.posts.push(data.posts[item]);
+                        if (data.found > 0) {
+                            self.maxPagingIndex = page;
+                            var items = self.addItemsToList(data.posts);
+                            localStorageObject = { 'post_count': self.totalCount, 'posts': [], 'lastFetched': new Date() };
+
+                            for (var item in items) {
+                                localStorageObject.posts.push(data.posts[item]);
+                            }
+                            self.saveToStorage(localStorageObject);
                         }
-                        self.saveToStorage(localStorageObject);
+
+                        promise.resolve();
                     }
+                },
+                error: function (e) {
+                    for (var i in e) {
+                        if (e[i])
+                            console.log("wpcom.fetch() error: " + i + " " + e[i]);
+                    }
+                    localStorageObject = self.loadFromStorage();
+                    if (localStorageObject != null && localStorageObject.posts != null)
+                        self.addItemsToList(localStorageObject.posts);
 
-                    defered.resolve();
+                    promise.reject();
+                    self.fetching = false;
                 }
-            },
-            function (e) {
-                for(var i in e)
-                    console.log("call error: "  + i + " " + e[i]);
-                localStorageObject = self.loadFromStorage();
-                if (localStorageObject != null && localStorageObject.posts != null)
-                    self.addItemsToList(localStorageObject.posts);
-
-                defered.reject();
-                self.fetching = false;
-            },
-            function() {
-                defered.notify();
-                self.fetching = false;
             });
         } else {
             if (!localStorageObject) {
-                defered.reject();
-            }
-            else {
+                promise.reject();
+            } else {
                 self.addItemsToList(localStorageObject.posts);
                 self.lastFetched = localStorageObject.lastFetched;
                 self.totalCount = localStorageObject.post_count;
-                defered.resolve();
+                promise.resolve();
             }
         }
     }
-    return defered;
+    
+    return promise;
 };
 
 // Check if module show call API or read from local storage
@@ -259,13 +273,11 @@ wordpresscomModule.prototype.showPost = function (e, module) {
         if (module.list[i].id == id)
             post = module.list[i];
     }
-    var p = view.createPage('wpc-post-' + post.id, module.templateName);
+    var p = view.createPage('wpc-post-' + post.id, module.templateName, module.title);
 
     console.log('show...' + post.title);
 
     var content = $.Mustache.render(this.templateName + "-post-content", post);
-    var header = $.Mustache.render(this.templateName + "-post-header", post);
-    p.appendHeader(header);
     p.appendContent(content);
     p.navigateTo();
 
@@ -274,7 +286,7 @@ wordpresscomModule.prototype.showPost = function (e, module) {
 wordpresscomModule.prototype.showCategory = function (e, module) {
     var id = $(e).attr('rel');
     
-    var p = view.createPage('wpc-module-' + module.id, module.templateName);
+    var p = view.createPage('wpc-module-' + module.id, module.templateName, module.title);
 
     console.log('show category...' + module.title);
     var viewData = { posts: [], title: module.title, id: module.id };
@@ -285,9 +297,10 @@ wordpresscomModule.prototype.showCategory = function (e, module) {
     var content = $.Mustache.render(this.templateName + "-list", viewData);
     
     p.appendContent(content);    
-    p.appendHeader("<h1>" + module.title + "</h1>");
-    $(p).on('click', '.wpc-post-div', function (e) { module.showPost(this, module); });
     p.navigateTo();
+    $('#content #wpc-module-' + module.id).on('click', '.wpc-post-div', function (e) {
+        module.showPost(this, module);
+    });
 
 };
 
@@ -363,6 +376,11 @@ wordpresscomModule.prototype.convertPage = function (item, list, parentId) {
         parentId: parentId,
         hasChildren: false
     };
+    
+    res.datetime = Date.parse(res.date);
+    if (res.datetime !== NaN)
+        res.ago = util.timeSince(res.date);
+
 
     res.description = "";
     // get the first image from attachments
@@ -410,10 +428,13 @@ wordpresscomModule.prototype.convertItem = function (item, type) {
         date: item.date.replace(' ', 'T'),
         authorId: item.author.ID,
         authorName: item.author.name,
-        comments: item.comments
+        comments: item.comments,
     };
 
-
+    res.datetime = Date.parse(res.date);
+    if (res.datetime !== NaN)
+        res.ago = util.timeSince(res.date);
+        
     res.description = res.title;
 
     if (res.description) {
@@ -528,9 +549,6 @@ wordpresscomModule.prototype.getComments = function (postId, c, r, p) {
         function (result) {
             r(result);
             self.fetching = false;
-        },
-        function (result) {
-            p(result);
         }
     );
 };

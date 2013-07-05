@@ -1,15 +1,60 @@
 .wpc-hub-title, .wpc-post-title , .wpc-post-subtitle {
-    color: #fff;
-    text-shadow: 2px 2px #888888;
+    color:#3C3C3C;
 }
 
 .wpc-hub-title {
-    color: #999;
-    text-shadow: 2px 2px #fff;
-    padding: 4px 0px 2px;
 }
 
 .wpc-post-div {
-    background-color: #ccc;
-    border-top: solid 2px #666;
 }
+
+.wpc-post {
+    padding: 15px;
+}
+
+#afui > #header {
+    border-top: solid 1px #FF1922;
+    border-bottom: solid 1px #FF1922;
+    background-color: #ED1C24;
+
+}
+
+#afui #menu .list li, #afui #menu .list .divider, #afui #menu .list li:last-child {
+border-color: #5C5C5C;
+}
+
+#afui  {
+    background-color: #ED1C24;
+}
+#afui > #menu.tabletMenu {
+    color: white;
+    background: #454545;
+    border-right: 1px solid #5C5C5C;
+}
+
+#afui #content {
+    background-color: #fff;
+}
+
+#afui .panel {
+    background-color: #fff;
+    padding: 0;
+    margin: 0;
+}
+
+
+#afui #navbar a {
+ 
+}
+ #afui #navbar a.pressed {
+    border-radius:0;    
+    background:#5C5C5C;
+ }
+
+.wpc-hub-div:first-child {
+    background-color: #454545;
+ }
+
+.wpc-hub-div:first-child h1, .wpc-hub-div:first-child h2, .wpc-hub-div:first-child h3, .wpc-hub-div:first-child h4, .wpc-hub-div:first-child p {
+    color: #fff !important;
+ }

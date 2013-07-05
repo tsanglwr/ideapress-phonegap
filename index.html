@@ -22,32 +22,13 @@
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" href="css/jquery.mobile-1.3.1.min.css" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <link rel="stylesheet" type="text/css" href="css/af.ui.base.css" />
+        <link rel="stylesheet" type="text/css" href="css/icons.css" />
         <link rel="stylesheet" type="text/css" href="modules/wordpressCom/css/wpcom.css" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
         <link rel="stylesheet" type="text/css" href="css/custom.css" />
-        <title></title>
-    </head>
-    <body>
         
-        <div id="container">
-            <div data-role="page">
-                <div data-role="header">
-                    <h2>Loading...</h2>
-                </div>
-
-            </div>  
-        </div>
         
-        <!--
-            <script type="text/javascript" src="http://jxp.github.io/phonegap-desktop/demo/phonegap.js"></script>
-            <script type="text/javascript">
-            var WEBMODE = true;
-        </script>
-            -->
-    <!--
-        <script type="text/javascript" src="cordova.js"></script>
-        -->
         <script type="text/javascript">
             var WEBMODE = false;
             var LOCALPATH = "";
@@ -58,18 +39,51 @@
 
             // setup stuff
             if (WEBMODE) {
-                document.write("<script  type='text/javascript' src='cordova.shim.js'><\/script>");
+                document.write("<script type='text/javascript' src='cordova.shim.js'><\/script>");
             }
             else {
                 LOCALPATH = "file://www/";
-                document.write("<script  type='text/javascript' src='cordova.js'><\/script>");
+                document.write("<script type='text/javascript' src='cordova.js'><\/script>");
             }
+            
 
         </script>
 
 
-        <script src="js/lib/jquery-1.9.1.min.js"></script>
-        <script src="js/lib/jquery.mobile-1.3.1.min.js"></script>
+        <script src="js/lib/appframework.js"></script>
+        <script src="js/lib/rsvp.js"></script>
+
+        
+      <link rel="stylesheet" type="text/css" href="js/lib/plugins/css/af.actionsheet.css"  />
+      <link rel="stylesheet" type="text/css" href="js/lib/plugins/css/af.popup.css"  />
+      <link rel="stylesheet" type="text/css" href="js/lib/plugins/css/af.selectBox.css"  />
+
+        <!-- include af.desktopBrowsers.js on desktop browsers only -->
+        <script>
+
+
+            if (!((window.DocumentTouch && document instanceof DocumentTouch) || 'ontouchstart' in window)) {
+                var script = document.createElement("script");
+                script.src = "js/lib/plugins/af.desktopBrowsers.js";
+                var tag = $("head").append(script);
+            }
+
+
+        </script>
+        <script type="text/javascript" charset="utf-8" src="js/lib/plugins/af.scroller.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/lib/plugins/af.css3animate.js"></script>
+
+        <script type="text/javascript" charset="utf-8" src="js/lib/plugins/af.actionsheet.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/lib/plugins/af.passwordBox.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/lib/plugins/af.selectBox.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/lib/plugins/af.touchEvents.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/lib/plugins/af.touchLayer.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/lib/plugins/af.popup.js"></script>
+
+        <script type="text/javascript" charset="utf-8" src="js/lib/ui/src/appframework.ui.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/lib/ui/transitions/all.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/lib/plugins/af.slidemenu.js"></script>
+
         <script src="js/lib/mustache.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/core.js"></script>
@@ -82,20 +96,37 @@
             $(document).bind("mobileinit", function () {
                 // Make your jQuery Mobile framework configuration changes here!
                 $.support.cors = true;
-                $.mobile.allowCrossDomainPages = true;                               
+                $.mobile.allowCrossDomainPages = true;
             });
-            
-            if (WEBMODE) {
 
-                $.ajaxSetup({
-                    dataType: "jsonp",
-                });
+            if (WEBMODE) {
+                $.ajaxSettings.dataType = "jsonp";
             }
             else {
-                $.ajaxSetup({
-                    dataType: "json",
-                });
+                $.ajaxSettings.dataType = "json";                
             }
         </script>
+
+        <title></title>
+    </head>
+    <body>
+        <div id="afui">
+            <div id="header">
+                <a href="#" class="menuButton" style="float:left;" onclick="$.ui.toggleSideMenu()"></a>
+            </div>
+            <div id="content">
+                <div id="ip-hub" class="panel" selected="true">
+                    <h1>Loading...</h1>
+                </div>
+            </div>
+        <nav id="main_menu">            
+            <ul class="list">
+                <li>Home</li>
+                <li>About Us</li>
+                <li>Pages</li>
+            </ul>
+        </nav>   
+        </div>    
+ 
     </body>
 </html>

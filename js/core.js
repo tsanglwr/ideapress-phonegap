@@ -16,6 +16,9 @@ var ideaPress = function () {
         hub : null,
         // Initialize all modules
         initModules: function () {
+
+            console.log("ideaPress.initModules(): Enter");
+            
             var promises = [];
 
             // register all the modules defined in options.js
@@ -27,7 +30,8 @@ var ideaPress = function () {
                 var m = new module(this, options);
                 this.modules.push(m);
                 
-                promises.push(m.initialize());
+                promises.push(m.initialize().then(function () {
+                }));
             }
 
             // register search module
@@ -39,19 +43,27 @@ var ideaPress = function () {
             if (this.options.notification) {
                 // TODO: notificaiton module?
             }
+            
+            console.log("ideaPress.initModules(): Exit");
+
             return promises;
         },
 
 
         // Call each module to render its content on hub.html
         renderModules: function () {
+            console.log("ideaPress.renderModules(): Enter");
+
             var promises = [];
-            this.hub = view.createPage("ip-hub", this.modules[0].templateName);
-            this.hub.appendHeader("<h1>" + this.options.appTitle + "</h1>" );
+            this.hub = view.createPage("ip-hub", this.modules[0].templateName, this.options.appTitle);
             for (var i in this.modules) {
-                if (this.modules[i].showHub)
+                if (this.modules[i].showHub) {
+                    console.log("ideaPress.renderModules(): rendering modules: " + i);
                     promises.push(this.modules[i].render(this.hub));
+                }
             }
+
+            console.log("ideaPress.renderModules(): Exit");
             return promises;
         },
         

@@ -21,18 +21,29 @@ var util = {
     },
 
     // Helper method to convert DateTime to readable format
-    timeSince: function (date) {
-        var seconds = Math.floor((new Date().getTime() / 1000) - (new Date(date).getTime() / 1000));
+    timeSince: function (date, mode) {
+        var d = new Date(date);
+        var seconds = Math.floor((new Date().getTime() / 1000) - (d.getTime() / 1000));
 
         var interval = Math.floor(seconds / 31536000);
         var timeago;
 
         if (interval >= 1) {
-            timeago = interval + " year";
+            if (mode === 1) {
+                timeago = interval + " year";
+            }
+            else {
+                timeago = d.getDate() + "-" + d.getMonth + "-" + d.getYear();
+            }
         } else {
             interval = Math.floor(seconds / 2592000);
             if (interval >= 1) {
-                timeago = interval + " month";
+                if (mode === 1) {
+                    timeago = interval + " month";
+                }
+                else {
+                    timeago = d.getDate() + "-" + d.getMonth + "-" + d.getYear();
+                }
             } else {
                 interval = Math.floor(seconds / 86400);
                 if (interval >= 1) {
@@ -51,6 +62,10 @@ var util = {
 
         if (1 != interval)
             timeago = timeago + 's';
+        
+        if (!mode)
+            timeago += " ago";
+        
         return timeago;
     },
 
