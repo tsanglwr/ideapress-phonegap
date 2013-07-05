@@ -31,6 +31,8 @@ var util = {
         if (interval >= 1) {
             if (mode === 1) {
                 timeago = interval + " year";
+                if (1 != interval)
+                    timeago = timeago + 's';
             }
             else {
                 timeago = d.getDate() + "-" + d.getMonth + "-" + d.getYear();
@@ -40,6 +42,8 @@ var util = {
             if (interval >= 1) {
                 if (mode === 1) {
                     timeago = interval + " month";
+                    if (1 != interval)
+                        timeago = timeago + 's';
                 }
                 else {
                     timeago = d.getDate() + "-" + d.getMonth + "-" + d.getYear();
@@ -48,20 +52,19 @@ var util = {
                 interval = Math.floor(seconds / 86400);
                 if (interval >= 1) {
                     timeago = interval + " day";
+                    if (1 != interval)
+                        timeago = timeago + 's';
                 } else {
                     interval = Math.floor(seconds / 3600);
                     if (interval >= 1) {
-                        timeago = interval + " hour";
+                        timeago = interval + " hr";
                     } else {
                         interval = Math.max(1, Math.floor(seconds / 60));
-                        timeago = interval + " minute";
+                        timeago = interval + " min";
                     }
                 }
             }
         }
-
-        if (1 != interval)
-            timeago = timeago + 's';
         
         if (!mode)
             timeago += " ago";
