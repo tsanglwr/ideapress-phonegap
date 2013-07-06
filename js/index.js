@@ -42,7 +42,7 @@ var app = {
         $.ajaxSettings.timeout = 60000;
         $.ajaxSettings.crossDomain = true;
         $.ui.removeFooterMenu();
-        $.ui.backButtonText = "";
+        $.ui.backButtonText = "back";
         
         console.log('Ready...');
         

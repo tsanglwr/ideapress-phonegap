@@ -55,7 +55,7 @@ var ideaPress = function () {
             console.log("ideaPress.renderModules(): Enter");
 
             var promises = [];
-            this.hub = view.createPage("ip-hub", this.modules[0].templateName, this.options.appTitle);
+            this.hub = view.createPanel("ip-hub", this.modules[0].templateName, this.options.appTitle);
             for (var i in this.modules) {
                 if (this.modules[i].showHub) {
                     console.log("ideaPress.renderModules(): rendering modules: " + i);
@@ -92,7 +92,15 @@ var ideaPress = function () {
             if (this.globalFetch)
                 this.globalFetch.abort();
         },
-
+        
+        addMenuItem: function (title, id) {
+            $('#menu_list').append($("<li id='menu_item_" + id + "'><a href='#" + id + "'>" + title + "</a></li>"));
+        },
+        
+        removeMenuItem: function (id) {
+            $('#menu_list #menu_item_' + id).remove();
+        },
+        
         // TODO: show Menu
         showMenu: function() {
 
