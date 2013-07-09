@@ -2,3 +2,20 @@
     left: 80px !important;
 }
 
+.wpc-hub-title {
+}
+
+.wpc-post-div {
+}
+
+.wpc-post {
+    padding: 15px;
+}
+
+#afui #navbar a {
+ 
+}
+ #afui #navbar a.pressed {
+    border-radius:0;    
+    background:#5C5C5C;
+ }

@@ -122,6 +122,22 @@ var ideaPress = function () {
         hideLoader : function () {
         
         },
+        
+        /*TODO: move this into a special JS for live preview?*/
+        livePreviewStart : function (options) {
+            
+        },
+        livePreviewUpdateStyle: function (styles) {
+            //  [ { cssRule: ".ip-theme-bg-color", property: "background-color", value : "#FFF !important" } ]
+            for(var i = 0; i < styles.length; i ++) {
+                $(styles[i].cssRule).css(styles[i].property, styles[i].value);
+            }
+        },
+        livePreviewUpdateLayoutOptions: function (options) {
+        },
+        livePreviewUpdateContent: function (contents) {
+        },
+        
     };
 
     return instance;

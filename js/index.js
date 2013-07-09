@@ -61,8 +61,7 @@ var app = {
                 console.log('Module rendered...');
             });
         });
-        
-        
+                
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
