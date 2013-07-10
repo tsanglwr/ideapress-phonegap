@@ -126,7 +126,7 @@ var ideaPress = function () {
         },
         search: function (searchQuery) {
             this.searchModule.search(searchQuery);
-        }
+        },
         
         /*TODO: move this into a special JS for live preview?*/
         livePreviewStart : function (options) {

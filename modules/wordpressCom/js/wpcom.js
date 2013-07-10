@@ -569,7 +569,7 @@ wordpresscomModule.prototype.searchInit = function() {
     var self = this;
 
     if (self.typeId === wordpresscomModule.SEARCH) {
-        self.searchPage = view.createPage('search-result', self.templateName, 'Search Result');
+        self.searchPage = view.createPanel('search-result', self.templateName, 'Search Result');
     }
 };
 
@@ -620,7 +620,8 @@ wordpresscomModule.prototype.search = function (query) {
                         //var p = view.createPage('wpc-post-' + post.id, module.templateName, module.title);
                         //var selfsearchPage = view.createPage('search-result', self.templateName, 'Search Result');
                         //self.searchPage.html("");
-                        self.searchPage.appendContent(content);
+                        self.searchPage.html(content);
+                        self.searchPage.update();
                         self.searchPage.navigateTo();
                         $('#content #search-result').on('click', '.wpc-post-div', function (e) {
                             self.showPost(this, self);
