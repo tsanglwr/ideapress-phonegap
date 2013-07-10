@@ -5,3 +5,20 @@
 #afui input[type=search].searchButton {
     width: 100px;
 }
+.wpc-hub-title {
+}
+
+.wpc-post-div {
+}
+
+.wpc-post {
+    padding: 15px;
+}
+
+#afui #navbar a {
+ 
+}
+ #afui #navbar a.pressed {
+    border-radius:0;    
+    background:#5C5C5C;
+ }

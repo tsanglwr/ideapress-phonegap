@@ -42,7 +42,7 @@ var app = {
         $.ajaxSettings.timeout = 60000;
         $.ajaxSettings.crossDomain = true;
         $.ui.removeFooterMenu();
-        $.ui.backButtonText = "";
+        $.ui.backButtonText = "back";
         
         console.log('Ready...');
         
@@ -61,8 +61,7 @@ var app = {
                 console.log('Module rendered...');
             });
         });
-        
-        
+                
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {

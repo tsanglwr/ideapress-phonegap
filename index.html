@@ -109,7 +109,7 @@
     </head>
     <body>
         <div id="afui">
-            <div id="header">
+            <div id="header" class="ip-header">
                 <a href="#" class="menuButton" style="float:left;" onclick="$.ui.toggleSideMenu()"></a>
                 
                 <input type="search" id="searchButton" class="searchButton" style="float:right;" onchange="ideaPress.search($(this).val());" />
@@ -120,10 +120,8 @@
                 </div>
             </div>
         <nav id="main_menu">            
-            <ul class="list">
-                <li>Home</li>
-                <li>About Us</li>
-                <li>Pages</li>
+            <ul id="menu_list" class="list">
+                <li><a href="#ip-hub">Home</a></li>
             </ul>
         </nav>   
         </div>    
