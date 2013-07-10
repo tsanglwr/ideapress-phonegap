@@ -138,8 +138,11 @@ wordpresscomModule.prototype.update = function (page) {
     });
 };
 // Refresh data and update UI
-wordpresscomModule.prototype.refresh = function () {
-    
+wordpresscomModule.prototype.refresh = function (fetch) {
+    if (fetch) {
+        
+    }
+    this.renderPanel();
 };
 // Cancel any WinJS.xhr in progress
 wordpresscomModule.prototype.cancel = function () {

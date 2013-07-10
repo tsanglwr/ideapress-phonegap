@@ -78,8 +78,8 @@ var ideaPress = function () {
 
         // Call each module to refresh its content or data store
         refresh: function() {      
-            this.modules[currentModule].refresh();
-        
+            this.modules[currentModule].refresh(true);
+
             hideMenu();
         },
 
@@ -101,14 +101,13 @@ var ideaPress = function () {
             $('#menu_list #menu_item_' + id).remove();
         },
         
-        // TODO: show Menu
         showMenu: function() {
-
+            $.ui.toggleSideMenu(true);
+            
         },
 
-        // TODO: hide Menu
         hideMenu: function() {
-
+            $.ui.toggleSideMenu(false);
         },
     
         // TODO: Show external URL
@@ -134,6 +133,16 @@ var ideaPress = function () {
             }
         },
         livePreviewUpdateLayoutOptions: function (options) {
+            for (var i = 0; i < this.modules.length; i++) {
+                this.modules[i].templateName = options.templateName;
+            }
+            ideaPress.hub.html("");
+            var promises = ideaPress.renderModules();
+            RSVP.all(promises).then(function () {
+                ideaPress.hub.update();
+                ideaPress.hub.navigateTo();
+            });
+            
         },
         livePreviewUpdateContent: function (contents) {
         },

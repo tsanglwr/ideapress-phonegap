@@ -17,6 +17,7 @@ var view = function() {
             panel.update = function() {
 
                 $.ui.updatePanel("#" + panel.attr('id'), panel.html());
+                $('#content #' + panel.attr('id')).attr("class", "panel");
                 $('#content #' + panel.attr('id')).addClass(panel.cssName);
             };
             panel.navigateTo = function (effect) {                
