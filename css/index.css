@@ -2,3 +2,6 @@
     left: 80px !important;
 }
 
+#afui input[type=search].searchButton {
+    width: 100px;
+}

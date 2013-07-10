@@ -21,6 +21,7 @@ var wordpresscomModule = function (ideaPress, options) {
     this.templateName = options.templateName;
     this.hubType = options.hubType;
     this.showHub = options.showHub;
+    this.searchPage = '';
     return this;    
 };
 
@@ -29,6 +30,7 @@ wordpresscomModule.PAGES = 0;
 wordpresscomModule.MOSTRECENT = 1;
 wordpresscomModule.CATEGORY = 2;
 wordpresscomModule.BOOKMARKS = 3;
+wordpresscomModule.SEARCH = 4;
 
 wordpresscomModule.initialized = false;
 
@@ -61,6 +63,7 @@ wordpresscomModule.prototype.initialize = function (elem) {
     }
     
     console.log("wpc.initialize() [" + self.id + "]: Exit");
+
     return promise;
 };
 
@@ -79,7 +82,8 @@ wordpresscomModule.prototype.render = function(hub) {
         // setup event handlers
         self.hubContainer.html(content);
         $('#content #ip-hub').on('click', "#wpc-hub-section-" + self.id + ' .wpc-hub-title', function(e) { self.showCategory(this, self); });
-        $('#content #ip-hub').on('click', "#wpc-hub-section-" + self.id + ' .wpc-post-div', function(e) { self.showPost(this, self); });
+        $('#content #ip-hub').on('click', "#wpc-hub-section-" + self.id + ' .wpc-post-div', function (e) { self.showPost(this, self); });
+
         promise.resolve();
     }, function() {
         promise.reject();
@@ -526,10 +530,8 @@ wordpresscomModule.prototype.removeBookmark = function (id) {
     bookmarks.post_count = bookmarks.posts.length;
     util.saveToStorage(self.localStorageBookmarkKey, JSON.stringify(bookmarks));
 };
-
-
 // Get comments for a post thru API
-wordpresscomModule.prototype.getComments = function (postId, c, r, p) {
+wordpresscomModule.prototype.getComments = function (postId, c, r, p) {    
     var self = this;
     //https://public-api.wordpress.com/rest/v1/sites/$site/posts/$postId/replies/
     if (false !== self.fetching) {
@@ -551,4 +553,80 @@ wordpresscomModule.prototype.getComments = function (postId, c, r, p) {
             self.fetching = false;
         }
     );
+};
+
+wordpresscomModule.prototype.searchInit = function() {
+    var self = this;
+
+    if (self.typeId === wordpresscomModule.SEARCH) {
+        self.searchPage = view.createPage('search-result', self.templateName, 'Search Result');
+    }
+};
+
+// Search for posts thru API
+wordpresscomModule.prototype.search = function (query) {
+    var self = this;
+   
+        var queryString = 'rest/v1/sites/' + self.siteDomain + '/posts/?number=5&search=' + query;
+
+        var fullUrl = self.apiURL + queryString;
+        var headers = { "User-Agent": self.userAgent };
+
+        if (false !== self.fetching) {
+            self.fetching.cancel();
+            return;
+        }
+
+        self.fetching = $.ajax({
+            type: 'GET',
+            url: fullUrl,
+            xxx: true,
+            headers: headers,
+            cache: false,
+            success: function (r) {
+                var data = r;
+                
+                if (data.found == undefined || data.found == "0") {
+                    //self.maxPagingIndex = page;
+                    //promise.resolve();
+                    return;
+                } else {
+                    var content = "search result: Empty ...";
+                    self.totalCount = data.found;
+                    console.log("search call done");
+                    if (data.found > 0) {
+                        
+                        //self.maxPagingIndex = page;
+                        var items = self.addItemsToList(data.posts);
+                        
+                        var viewData = { posts: [], title: 'Search-result', id: 7};
+                        for (var i = 0 ; i < items.length; i++) {
+                            viewData.posts.push(items[i]);
+                        }
+                        content = $.Mustache.render(self.templateName + "-list", viewData);
+                        
+                    }
+                    if (self) {
+                        //var p = view.createPage('wpc-post-' + post.id, module.templateName, module.title);
+                        //var selfsearchPage = view.createPage('search-result', self.templateName, 'Search Result');
+                        //self.searchPage.html("");
+                        self.searchPage.appendContent(content);
+                        self.searchPage.navigateTo();
+                        $('#content #search-result').on('click', '.wpc-post-div', function (e) {
+                            self.showPost(this, self);
+                        });
+
+
+                        //self.searchPage.appendContent(content);
+                        //self.searchPage.navigateTo();
+                    }
+                    //promise.resolve();
+                    return;
+                }                
+            },
+            error: function (e) {
+                
+                alert('failed');
+            }
+        });
 };

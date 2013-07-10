@@ -36,7 +36,10 @@ var ideaPress = function () {
 
             // register search module
             if (this.options.searchModule) {
-                // TODO: search
+                module = this.options.searchModule.name;
+                options = this.options.searchModule.options;
+                this.searchModule = new module(this, options);
+                this.searchModule.searchInit();
             }
 
             // register notification module
@@ -114,6 +117,9 @@ var ideaPress = function () {
         hideLoader : function () {
         
         },
+        search: function (searchQuery) {
+            this.searchModule.search(searchQuery);
+        }
     };
 
     return instance;
