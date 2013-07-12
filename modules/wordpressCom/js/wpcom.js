@@ -22,6 +22,7 @@ var wordpresscomModule = function (ideaPress, options) {
     this.hubType = options.hubType;
     this.showHub = options.showHub;
     this.searchPage = '';
+    this.currentPostId = null;
     return this;    
 };
 
@@ -73,7 +74,21 @@ wordpresscomModule.prototype.render = function(hub) {
     self.hubContainer = hub.createSection("wpc-hub-section-" + self.id, self.templateName + "-hub");
     self.hubContainer.addClass("wpc-hub-div");
 
-    self.fetch(0).then(function() {
+    /*
+    if (self.typeId === wordpresscomModule.BOOKMARKS) {
+        if (self.list.length == 0) {
+            var content = self.container.querySelector(".mp-module-content");
+            content.parentNode.className = content.parentNode.className + ' hide';
+           
+           
+        }
+        promise.resolve();
+    }
+    else {*/
+    
+    self.fetch(0).then(function () {
+
+
         var viewData = { posts: [], title: self.title, id: self.id };
         for (var i = 0; i < Math.min(self.hubSize, self.list.length); i++) {
             viewData.posts.push(self.list[i]);
@@ -84,6 +99,11 @@ wordpresscomModule.prototype.render = function(hub) {
         $('#content #ip-hub').on('click', "#wpc-hub-section-" + self.id + ' .wpc-hub-title', function(e) { self.showCategory(this, self); });
         $('#content #ip-hub').on('click', "#wpc-hub-section-" + self.id + ' .wpc-post-div', function (e) { self.showPost(this, self); });
         
+        $('#header').on('click', '#bookMarkButton', function (e) {
+            
+            self.addBookmark(this, self);
+        });
+        
         // render Panel
         self.renderPanel();
         ideaPress.addMenuItem(self.title, 'wpc-module-' + self.id);
@@ -92,6 +112,7 @@ wordpresscomModule.prototype.render = function(hub) {
     }, function() {
         promise.reject();
     });
+
     return promise;
 };
 
@@ -298,17 +319,18 @@ wordpresscomModule.prototype.saveToStorage = function (data) {
 // Navigate to Detail page
 wordpresscomModule.prototype.showPost = function (e, module) {
     var id = $(e).attr('rel');
+    this.currentPostId = id;
     var post = null;
     for (var i in module.list) {
         if (module.list[i].id == id)
             post = module.list[i];
     }
     var p = view.createPanel('wpc-post-' + post.id, module.templateName, module.title);
-
     console.log('show...' + post.title);
 
     var content = $.Mustache.render(this.templateName + "-post-content", post);
     p.append(content);
+    //content.attr("rel", post.id);
     p.navigateTo();
 
 };
@@ -512,19 +534,38 @@ wordpresscomModule.prototype.checkIsBookmarked = function (id) {
 };
 
 // Add post to bookmark
-wordpresscomModule.prototype.addBookmark = function (item) {
-    var self = this;
-
-    var bookmarks = self.getBookmarks();
-    for (var index in bookmarks.posts) {
-        if (item.id == bookmarks.posts[index].id) {
-            return;
-        }
+wordpresscomModule.prototype.addBookmark = function (e, module) {
+    if (!this.currentPostId) {
+        return;
     }
-    item.module = null;
-    bookmarks.posts.push(item);
-    bookmarks.post_count = bookmarks.posts.length;
-    util.saveToStorage(self.localStorageBookmarkKey, JSON.stringify(bookmarks));
+    var postId = this.currentPostId;
+    var post = null;
+    for (var i in module.list) {
+        if (module.list[i].id == postId)
+            post = module.list[i];
+    }
+
+
+    var isBookmarked = this.checkIsBookmarked(postId);
+    if (!isBookmarked) {
+        var copyItem = clone(post);
+        
+        var self = this;
+
+        var bookmarks = self.getBookmarks();
+        for (var index in bookmarks.posts) {
+            if (copyItem.id == bookmarks.posts[index].id) {
+                return;
+            }
+        }
+        
+        copyItem.module = null;
+        bookmarks.posts.push(copyItem);
+        bookmarks.post_count = bookmarks.posts.length;
+        util.saveToStorage(self.localStorageBookmarkKey, JSON.stringify(bookmarks));
+        
+        //updateButton(true);
+    }
 };
 
 // Remove post to bookmark
@@ -641,3 +682,12 @@ wordpresscomModule.prototype.search = function (query) {
             }
         });
 };
+
+function clone(obj) {
+    if (null == obj || "object" != typeof obj) return obj;
+    var copy = obj.constructor();
+    for (var attr in obj) {
+        if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+    }
+    return copy;
+}

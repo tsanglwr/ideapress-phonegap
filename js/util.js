@@ -1,8 +1,10 @@
 var util = {
     // Check local storage schema version
     checkLocalStorageSchemaVersion: function () {
-        if (null == window.localStorage || null == window.localStorage.schemaVersion || window.localStorage.schemaVersion != ideaPress.localStorageSchemaVersion)
+        if (typeof(window.localStorage) == 'undefined'||null == window.localStorage || null == window.localStorage.schemaVersion || window.localStorage.schemaVersion != ideaPress.localStorageSchemaVersion) {
+
             util.clearLocalStorage();
+        }
     },
     
     // Clear all local storage
