@@ -1,13 +1,13 @@
 ﻿/*
-IdeaPress Wordpress.COM API module
+IdeaPress Wordpress.org API module
 Author: IdeaNotion
 */
-var wordpresscomModule = function (ideaPress, options) {
-    this.templtePrefix = "wpc";
+var wordpressModule = function (ideaPress, options) {
+    this.templtePrefix = "wp";
     this.ideaPress = ideaPress;
     this.list = [];
-    this.localStorageBookmarkKey = "wpcom-bookmark";
-    this.apiURL = 'https://public-api.wordpress.com/';
+    this.localStorageBookmarkKey = "wp-bookmark";
+    this.apiURL = options.siteDomain;
     this.fetching = false;
     this.userAgent = navigator.userAgent;
     this.title = options.title;
@@ -27,21 +27,22 @@ var wordpresscomModule = function (ideaPress, options) {
 };
 
 // Constant
-wordpresscomModule.PAGES = 0;
-wordpresscomModule.MOSTRECENT = 1;
-wordpresscomModule.CATEGORY = 2;
-wordpresscomModule.BOOKMARKS = 3;
-wordpresscomModule.SEARCH = 4;
+wordpressModule.PAGES = 0;
+wordpressModule.MOSTRECENT = 1;
+wordpressModule.CATEGORY = 2;
+wordpressModule.BOOKMARKS = 3;
+wordpressModule.SEARCH = 4;
 
-wordpresscomModule.initialized = false;
+wordpressModule.initialized = false;
 
 /* 
 ============================================================================     External Methods     =============================================================//
 */
 // load templates
-wordpresscomModule.prototype.initialize = function (elem) {
+wordpressModule.prototype.initialize = function (elem) {
+
     var self = this;
-    console.log("wpc.initialize() [" + self.id + "]: Enter");
+    console.log("wp.initialize() [" + self.id + "]: Enter");
     /*
 var share = new Share();
 share.show({
@@ -54,35 +55,35 @@ share.show({
 
 
     var promise = new RSVP.Promise();
-    if (!wordpresscomModule.initialized) {
-        // file://www/modules/wordpressCom/pages/wpcom.template.html
-        console.log("wpc.initialize(): loading " + LOCALPATH + "modules/wordpressCom/pages/wpcom.template.html");
-
-        $.Mustache.load(LOCALPATH + "modules/wordpressCom/pages/wpcom.template.html", function() {
-            console.log("wpc.initialize() [" + self.id + "]: Ajax Resolve");
+    if (!wordpressModule.initialized) {
+        // file://www/modules/wordpress/pages/wp.template.html        
+        console.log("wp.initialize(): loading " + LOCALPATH + "modules/wordpress/pages/wp.template.html");
+        $.Mustache.load(LOCALPATH + "modules/wordpress/pages/wp.template.html", function () {
+            console.log("wp.initialize() [" + self.id + "]: Ajax Resolve");
             promise.resolve();
         },
-            function() {
-                console.log("wpc.initialize() [" + self.id + "]: Ajax Reject");
+            function () {
+                console.log("wp.initialize() [" + self.id + "]: Ajax Reject");
                 promise.reject();
             });
         
-        wordpresscomModule.initialized = true;
+        wordpressModule.initialized = true;
     } else {
-        console.log("wpc.initialize() [" + self.id + "]: Resolve");
+        console.log("wp.initialize() [" + self.id + "]: Resolve");
         promise.resolve();
     }
     
-    console.log("wpc.initialize() [" + self.id + "]: Exit");
+    console.log("wp.initialize() [" + self.id + "]: Exit");
 
     return promise;
 };
 
-wordpresscomModule.prototype.render = function(hub) {
+wordpressModule.prototype.render = function (hub) {
+
     var self = this;
     var promise = new RSVP.Promise();    
-    self.hubContainer = hub.createSection("wpc-hub-section-" + self.id, self.templateName + "-hub");
-    self.hubContainer.addClass("wpc-hub-div");
+    self.hubContainer = hub.createSection("wp-hub-section-" + self.id, self.templateName + "-hub");
+    self.hubContainer.addClass("wp-hub-div");
 
     /*
     if (self.typeId === wordpresscomModule.BOOKMARKS) {
@@ -106,8 +107,8 @@ wordpresscomModule.prototype.render = function(hub) {
         var content = $.Mustache.render(self.templateName + "-hub", viewData);
         // setup event handlers
         self.hubContainer.html(content);
-        $('#content #ip-hub').on('click', "#wpc-hub-section-" + self.id + ' .wpc-hub-title', function(e) { self.showCategory(this, self); });
-        $('#content #ip-hub').on('click', "#wpc-hub-section-" + self.id + ' .wpc-post-div', function (e) { self.showPost(this, self); });
+        $('#content #ip-hub').on('click', "#wp-hub-section-" + self.id + ' .wp-hub-title', function(e) { self.showCategory(this, self); });
+        $('#content #ip-hub').on('click', "#wp-hub-section-" + self.id + ' .wp-post-div', function (e) { self.showPost(this, self); });
         
         $('#header').on('click', '#bookMarkButton', function (e) {
             
@@ -116,7 +117,7 @@ wordpresscomModule.prototype.render = function(hub) {
         
         // render Panel
         self.renderPanel();
-        ideaPress.addMenuItem(self.title, 'wpc-module-' + self.id);
+        ideaPress.addMenuItem(self.title, 'wp-module-' + self.id);
         
         promise.resolve();
     }, function() {
@@ -126,9 +127,9 @@ wordpresscomModule.prototype.render = function(hub) {
     return promise;
 };
 
-wordpresscomModule.prototype.renderPanel = function() {
+wordpressModule.prototype.renderPanel = function() {
     var module = this;
-    module.panel = view.createPanel('wpc-module-' + module.id, module.templateName, module.title);
+    module.panel = view.createPanel('wp-module-' + module.id, module.templateName, module.title);
 
     var viewData = { posts: [], title: module.title, id: module.id };
     for (var i = 0; i < module.list.length; i++) {
@@ -139,14 +140,14 @@ wordpresscomModule.prototype.renderPanel = function() {
 
     module.panel.append(content);
     module.panel.update();
-    $('#content #wpc-module-' + module.id).on('click', '.wpc-post-div', function (e) {
+    $('#content #wp-module-' + module.id).on('click', '.wp-post-div', function (e) {
         module.showPost(this, module);
     });
 
 };
 
 // Fetch data and update UI
-wordpresscomModule.prototype.update = function (page) {
+wordpressModule.prototype.update = function (page) {
     var self = this;
     if (false !== self.fetching) {
         self.fetching.abort();
@@ -172,14 +173,14 @@ wordpresscomModule.prototype.update = function (page) {
     });
 };
 // Refresh data and update UI
-wordpresscomModule.prototype.refresh = function (fetch) {
+wordpressModule.prototype.refresh = function (fetch) {
     if (fetch) {
         
     }
     this.renderPanel();
 };
 // Cancel any WinJS.xhr in progress
-wordpresscomModule.prototype.cancel = function () {
+wordpressModule.prototype.cancel = function () {
     if (this.fetching)
         this.fetching.abort();
 };
@@ -192,16 +193,16 @@ wordpresscomModule.prototype.cancel = function () {
 */
 
 // Fetch pages, posts or bookmarks
-wordpresscomModule.prototype.fetch = function (page) {
+wordpressModule.prototype.fetch = function (page) {
     var self = this;
     var promise = new RSVP.Promise();
 
     var url = self.apiURL;
     var queryString;
 
-    if (self.typeId == wordpresscomModule.PAGES) {
+    if (self.typeId == wordpressModule.PAGES) {
         promise.resolve();
-    } else if (self.typeId == wordpresscomModule.BOOKMARKS) {
+    } else if (self.typeId == wordpressModule.BOOKMARKS) {
         var bookmarks = self.getBookmarks();
         self.post_count = bookmarks.post_count;
         self.lastFetched = bookmarks.lastFetched;
@@ -216,13 +217,20 @@ wordpresscomModule.prototype.fetch = function (page) {
 
         promise.resolve();
     } else {
-
-        if (self.typeId == wordpresscomModule.MOSTRECENT)
+        /*
+        if (self.typeId == wordpressModule.MOSTRECENT)
             queryString = 'rest/v1/sites/' + self.siteDomain + '/posts/?number=' + self.pageSize + '&order_by=date&page=' + (page + 1) + "&t=" + new Date().getUTCMilliseconds();
         else
             queryString = 'rest/v1/sites/' + self.siteDomain + '/posts/?number=' + self.pageSize + '&category=' + self.categoryId + '&page=' + (page + 1) + "&t=" + new Date().getUTCMilliseconds();
+        */
+        if (self.typeId == wordpressModule.MOSTRECENT)
+            queryString = '?json=get_recent_posts&count=' + self.defaultCount +'&number=' + self.pageSize + "&page=" + (page + 1) + "&t=" + new Date().getUTCMilliseconds();
+        else
+            queryString = '?json=get_category_posts&id=' + self.categoryId + '&number=' + self.pageSize  + '&count=' + self.defaultCount + "&page=" + (page + 1) + "&t=" + new Date().getUTCMilliseconds();
 
+        
         var fullUrl = url + queryString;
+ 
         var headers = { "User-Agent": self.userAgent };
         var localStorageObject = self.loadFromStorage();
         if (self.shouldFetch(localStorageObject, page)) {
@@ -235,14 +243,14 @@ wordpresscomModule.prototype.fetch = function (page) {
                 cache: false,
                 success: function(r) {
                     var data = r;
-                    if (data.found == undefined || data.found == "0") {
+                    if (data.status !== "ok" || data.count === "0") {
                         self.maxPagingIndex = page;
                         promise.resolve();
                     } else {
-                        self.totalCount = data.found;
+                        self.totalCount = data.count;
                         console.log("call done");
 
-                        if (data.found > 0) {
+                        if (data.count > 0) {
                             self.maxPagingIndex = page;
                             var items = self.addItemsToList(data.posts);
                             localStorageObject = { 'post_count': self.totalCount, 'posts': [], 'lastFetched': new Date() };
@@ -259,7 +267,7 @@ wordpresscomModule.prototype.fetch = function (page) {
                 error: function (e) {
                     for (var i in e) {
                         if (e[i])
-                            console.log("wpcom.fetch() error: " + i + " " + e[i]);
+                            console.log("wp.fetch() error: " + i + " " + e[i]);
                     }
                     localStorageObject = self.loadFromStorage();
                     if (localStorageObject != null && localStorageObject.posts != null)
@@ -285,7 +293,7 @@ wordpresscomModule.prototype.fetch = function (page) {
 };
 
 // Check if module show call API or read from local storage
-wordpresscomModule.prototype.shouldFetch = function (localStorageObject, page) {
+wordpressModule.prototype.shouldFetch = function (localStorageObject, page) {
     // TODO: turn off localstorage for development
     return true;
     if (localStorageObject) {
@@ -311,7 +319,7 @@ wordpresscomModule.prototype.shouldFetch = function (localStorageObject, page) {
 };
 
 // Load from local storage
-wordpresscomModule.prototype.loadFromStorage = function () {
+wordpressModule.prototype.loadFromStorage = function () {
     var storage = util.loadFromStorage(this.localStorageKey);
     if (storage != null) {
         var localStorageObject = JSON.parse(storage);
@@ -322,12 +330,12 @@ wordpresscomModule.prototype.loadFromStorage = function () {
 };
 
 // Save to local storage
-wordpresscomModule.prototype.saveToStorage = function (data) {
+wordpressModule.prototype.saveToStorage = function (data) {
     util.saveToStorage(this.localStorageKey, JSON.stringify(data));
 };
 
 // Navigate to Detail page
-wordpresscomModule.prototype.showPost = function (e, module) {
+wordpressModule.prototype.showPost = function (e, module) {
     var id = $(e).attr('rel');
     this.currentPostId = id;
     var post = null;
@@ -335,7 +343,7 @@ wordpresscomModule.prototype.showPost = function (e, module) {
         if (module.list[i].id == id)
             post = module.list[i];
     }
-    var p = view.createPanel('wpc-post-' + post.id, module.templateName, module.title);
+    var p = view.createPanel('wp-post-' + post.id, module.templateName, module.title);
     console.log('show...' + post.title);
 
     var content = $.Mustache.render(this.templateName + "-post-content", post);
@@ -345,14 +353,14 @@ wordpresscomModule.prototype.showPost = function (e, module) {
 
 };
 
-wordpresscomModule.prototype.showCategory = function (e, module) {
+wordpressModule.prototype.showCategory = function (e, module) {
     var p = module.panel;
     p.navigateTo();
 };
 
 
 // Add post to list
-wordpresscomModule.prototype.addItemsToList = function (jsonPosts) {
+wordpressModule.prototype.addItemsToList = function (jsonPosts) {
     var self = this;
     var itemArray = new Array();
     for (var key in jsonPosts) {
@@ -361,7 +369,7 @@ wordpresscomModule.prototype.addItemsToList = function (jsonPosts) {
         item.categories = jsonPosts[key].categories;
 
 
-        item.className = "wpc-item wpc-item-" + key;
+        item.className = "wp-item wp-item-" + key;
 
         var insert = true;
         self.list.forEach(function (value) {
@@ -379,7 +387,7 @@ wordpresscomModule.prototype.addItemsToList = function (jsonPosts) {
 };
 
 // Add page to list
-wordpresscomModule.prototype.addPagesToList = function (jsonPages) {
+wordpressModule.prototype.addPagesToList = function (jsonPages) {
     var self = this;
     var itemArray = new Array();
 
@@ -388,7 +396,7 @@ wordpresscomModule.prototype.addPagesToList = function (jsonPages) {
 
         item.module = self;
 
-        item.className = "wpc-item wpc-item-" + index;
+        item.className = "wp-item wp-item-" + index;
 
         var insert = true;
         self.list.forEach(function (value) {
@@ -400,23 +408,21 @@ wordpresscomModule.prototype.addPagesToList = function (jsonPages) {
             self.list.push(item);
             itemArray.push(item);
         }
-
     }
-
     return;
 };
 
 // Translate page to local object
-wordpresscomModule.prototype.convertPage = function (item, list, parentId) {
+wordpressModule.prototype.convertPage = function (item, list, parentId) {
     var res = {
         type: 'page',
         title: util.decodeEntities(item.title),
-        id: item.ID,
+        id: item.id,
         content: item.content,
         timestamp: item.date.substr(0, 10),
         permalink: item.URL.replace(/^https:/, 'http:'),
         date: item.date.replace(' ', 'T'),
-        authorId: item.author.ID,
+        authorId: item.author.id,
         authorName: item.author.name,
         comments: item.comments,
         parentId: parentId,
@@ -430,23 +436,31 @@ wordpresscomModule.prototype.convertPage = function (item, list, parentId) {
 
     res.description = "";
     // get the first image from attachments
-    res.imgUrl = 'ms-appx:/images/blank.png';
-    res.imgThumbUrl = 'ms-appx:/images/blank.png';
+    res.imgUrl = 'img/blank.png';
+    res.imgThumbUrl = 'img/blank.png';
 
-    if (item.featured_image) {
+    /*if (item.featured_image) {
         res.imgUrl = item.featured_image;
         res.imgThumbUrl = item.featured_image + "?h=220";  // TODO: resize based on CSS size?
+    }*/
+    if (item.thumbnail) {
+        
+        res.imgThumbUrl = item.thumbnail + "?h=220";
     }
-    else {
+    else{
+    
+    var found = false;
         for (var i in item.attachments) {
-            if (item.attachments[i].URL) {
-                res.imgUrl = item.attachments[i].URL;
-                res.imgThumbUrl = item.attachments[i].URL + "?h=220";  // TODO: resize based on CSS size?
+            if (item.attachments[i].images != null) {
+                res.imgUrl = item.attachments[i].images.full.url;
+                if (item.attachments[i].images.medium) {
+                    res.imgThumbUrl = item.attachments[i].images.medium.url;
+                    found = true;
+                }
                 break;
             }
         }
     }
-
     var imgUrlStyle = res.imgThumbUrl;
     res.imgUrlStyle = "url('" + imgUrlStyle + "')";
 
@@ -463,16 +477,16 @@ wordpresscomModule.prototype.convertPage = function (item, list, parentId) {
 };
 
 // Translate Post to local object
-wordpresscomModule.prototype.convertItem = function (item, type) {
+wordpressModule.prototype.convertItem = function (item, type) {
     var res = {
         type: type,
         title: util.decodeEntities(item.title),
-        id: item.ID,
+        id: item.id,
         content: item.content,
         timestamp: item.date.substr(0, 10),
-        permalink: item.URL.replace(/^https:/, 'http:'),
+        permalink: item.url.replace(/^https:/, 'http:'),
         date: item.date.replace(' ', 'T'),
-        authorId: item.author.ID,
+        authorId: item.author.id,
         authorName: item.author.name,
         comments: item.comments,
     };
@@ -492,18 +506,23 @@ wordpresscomModule.prototype.convertItem = function (item, type) {
     }
 
     // get the first image from attachments
-    res.imgUrl = '/images/cordova.png';
-    res.imgThumbUrl = '/images/blank.png';
+    res.imgUrl = 'img/blank.png';
+    res.imgThumbUrl = 'img/blank.png';
 
-    if (item.featured_image) {
+    /*if (item.featured_image) {
         res.imgUrl = item.featured_image;
         res.imgThumbUrl = item.featured_image + "?h=220";  // TODO: resize based on CSS size?
+    }*/
+    var itemThumbnail = item.thumbnail;
+    if (itemThumbnail) {
+        res.imgThumbUrl = itemThumbnail + "?h=220";
+        res.imgUrl = itemThumbnail;
     }
     else {
         for (var i in item.attachments) {
-            if (item.attachments[i].URL) {
-                res.imgUrl = item.attachments[i].URL;
-                res.imgThumbUrl = item.attachments[i].URL + "?h=220";  // TODO: resize based on CSS size?
+            if (item.attachments[i].url) {
+                res.imgUrl = item.attachments[i].url;
+                res.imgThumbUrl = item.attachments[i].url + "?h=220";  // TODO: resize based on CSS size?
                 break;
             }
         }
@@ -513,17 +532,19 @@ wordpresscomModule.prototype.convertItem = function (item, type) {
     res.imgUrlStyle = "url('" + imgUrlStyle + "')";
 
     var subtitle = '';
-    for (var j in item.categories) {
-        subtitle = subtitle + ', ' + util.decodeEntities(item.categories[j].name);
+    if (item.categories) {
+        for (var j in item.categories) {
+            subtitle = subtitle + ', ' + util.decodeEntities(item.categories[j].name);
+        }
+        res.subtitle = subtitle.substring(2);
+        
     }
-    res.subtitle = subtitle.substring(2);
-
     return res;
 
 };
 
 // Get Bookmarks from local storage
-wordpresscomModule.prototype.getBookmarks = function () {
+wordpressModule.prototype.getBookmarks = function () {
     var self = this;
     if (!util.loadFromStorage(self.localStorageBookmarkKey)) {
         util.saveToStorage(self.localStorageBookmarkKey, JSON.stringify({ 'post_count': 0, 'posts': [], 'lastFetched': new Date() }));
@@ -534,7 +555,7 @@ wordpresscomModule.prototype.getBookmarks = function () {
 };
 
 // Check if a post has been bookmarked
-wordpresscomModule.prototype.checkIsBookmarked = function (id) {
+wordpressModule.prototype.checkIsBookmarked = function (id) {
     var bookmarks = this.getBookmarks();
     for (var index in bookmarks.posts) {
         if (id == bookmarks.posts[index].id)
@@ -544,7 +565,7 @@ wordpresscomModule.prototype.checkIsBookmarked = function (id) {
 };
 
 // Add post to bookmark
-wordpresscomModule.prototype.addBookmark = function (e, module) {
+wordpressModule.prototype.addBookmark = function (e, module) {
     if (!this.currentPostId) {
         return;
     }
@@ -558,7 +579,7 @@ wordpresscomModule.prototype.addBookmark = function (e, module) {
 
     var isBookmarked = this.checkIsBookmarked(postId);
     if (!isBookmarked) {
-        var copyItem = clone(post);
+        var copyItem = ideaPress.clone(post);
         
         var self = this;
 
@@ -579,7 +600,7 @@ wordpresscomModule.prototype.addBookmark = function (e, module) {
 };
 
 // Remove post to bookmark
-wordpresscomModule.prototype.removeBookmark = function (id) {
+wordpressModule.prototype.removeBookmark = function (id) {
     var self = this;
     var bookmarks = self.getBookmarks();
     for (var index in bookmarks.posts) {
@@ -591,43 +612,19 @@ wordpresscomModule.prototype.removeBookmark = function (id) {
     bookmarks.post_count = bookmarks.posts.length;
     util.saveToStorage(self.localStorageBookmarkKey, JSON.stringify(bookmarks));
 };
-// Get comments for a post thru API
-wordpresscomModule.prototype.getComments = function (postId, c, r, p) {    
-    var self = this;
-    //https://public-api.wordpress.com/rest/v1/sites/$site/posts/$postId/replies/
-    if (false !== self.fetching) {
-        self.fetching.abort();
-    }
 
-    var queryString = 'rest/v1/sites/' + this.siteDomain + '/posts/' + postId + '/replies/';
-    var fullUrl = this.apiURL + queryString;
-    var headers = { "User-Agent": this.userAgent };
-
-    self.fetching = $({ type: 'GET', url: fullUrl, headers: headers }).then(
-        function (result) {
-            var data = JSON.parse(result.responseText);
-            c(data);
-            self.fetching = false;
-        },
-        function (result) {
-            r(result);
-            self.fetching = false;
-        }
-    );
-};
-
-wordpresscomModule.prototype.searchInit = function() {
+wordpressModule.prototype.searchInit = function () {
     var self = this;
 
-    if (self.typeId === wordpresscomModule.SEARCH) {
+    if (self.typeId === wordpressModule.SEARCH) {
         self.searchPage = view.createPanel('search-result', self.templateName, 'Search Result');
     }
 };
 
 // Search for posts thru API
-wordpresscomModule.prototype.search = function (query) {
+wordpressModule.prototype.search = function (query) {
     var self = this;
-   
+   /*
         var queryString = 'rest/v1/sites/' + self.siteDomain + '/posts/?number=5&search=' + query;
 
         var fullUrl = self.apiURL + queryString;
@@ -690,14 +687,5 @@ wordpresscomModule.prototype.search = function (query) {
                 
                 alert('failed');
             }
-        });
+        });*/
 };
-
-function clone(obj) {
-    if (null == obj || "object" != typeof obj) return obj;
-    var copy = obj.constructor();
-    for (var attr in obj) {
-        if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
-    }
-    return copy;
-}
