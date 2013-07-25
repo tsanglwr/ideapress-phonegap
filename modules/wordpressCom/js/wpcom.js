@@ -116,7 +116,7 @@ wordpresscomModule.prototype.render = function(hub) {
         
         // render Panel
         self.renderPanel();
-        ideaPress.addMenuItem(self.title, 'wpc-module-' + self.id);
+        ideaPress.addMenuItem(self.title, 'wpc-module-' + self.id, self.id);
         
         promise.resolve();
     }, function() {

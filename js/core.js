@@ -96,8 +96,17 @@ var ideaPress = function () {
                 this.globalFetch.abort();
         },
         
-        addMenuItem: function (title, id) {
-            $('#menu_list').append($("<li class='menu_item' id='menu_item_" + id + "'><a href='#" + id + "'>" + title + "</a></li>"));
+        addMenuItem: function (title, id, rel) {
+            var item = $("<li class='menu_item' rel='" + rel + "' id='menu_item_" + id + "'><a href='#" + id + "'>" + title + "</a></li>");
+            var menus = $('#menu_list li');
+            for(var i = 1 ; i < menus.length; i++) {
+                if (parseInt($(menus[i]).attr('rel')) > rel) {
+                    item.insertAfter($(menus[i - 1]));
+                    return;
+                }
+            }
+            $('#menu_list').append(item);
+
         },
         
         removeMenuItem: function (id) {
