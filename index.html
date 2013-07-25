@@ -22,7 +22,7 @@
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
         <!-- <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=384px,, height=device-height, target-densitydpi=device-dpi" /> -->
-        <meta name="viewport" content="width=384px,target-densitydpi=device-dpi" />
+        <meta name="viewport" content="width=384,target-densitydpi=device-dpi,height=800" />
         <link rel="stylesheet" type="text/css" href="css/af.ui.base.css" />
         <link rel="stylesheet" type="text/css" href="css/icons.css" />
         <link rel="stylesheet" type="text/css" href="modules/wordpressCom/css/wpcom.css" />
@@ -41,10 +41,11 @@
             // setup stuff
             if (WEBMODE) {
                 document.write("<script type='text/javascript' src='cordova.shim.js'><\/script>");
+                document.write("<script type='text/javascript' src='js/preview.js'><\/script>");
             }
             else {
                 //LOCALPATH = "file://www/";
-                LOCALPATH = "file:///android_asset/www/";
+                LOCALPATH = "file://www/";
                 document.write("<script type='text/javascript' src='cordova.js'><\/script>");
             }
             
@@ -122,7 +123,7 @@
             </div>
         <nav id="main_menu">            
             <ul id="menu_list" class="list">
-                <li><a href="#ip-hub">Home</a></li>
+                <li id="menu_home"><a href="#ip-hub">Home</a></li>
             </ul>
         </nav>   
         </div>    

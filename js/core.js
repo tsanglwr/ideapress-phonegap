@@ -97,13 +97,16 @@ var ideaPress = function () {
         },
         
         addMenuItem: function (title, id) {
-            $('#menu_list').append($("<li id='menu_item_" + id + "'><a href='#" + id + "'>" + title + "</a></li>"));
+            $('#menu_list').append($("<li class='menu_item' id='menu_item_" + id + "'><a href='#" + id + "'>" + title + "</a></li>"));
         },
         
         removeMenuItem: function (id) {
             $('#menu_list #menu_item_' + id).remove();
         },
         
+        clearMenuItems: function () {
+            $('#menu_list .menu_item').remove();
+        },
         showMenu: function() {
             $.ui.toggleSideMenu(true);
             
@@ -128,30 +131,6 @@ var ideaPress = function () {
             this.searchModule.search(searchQuery);
         },
         
-        /*TODO: move this into a special JS for live preview?*/
-        livePreviewStart : function (options) {
-            
-        },
-        livePreviewUpdateStyle: function (styles) {
-            //  [ { cssRule: ".ip-theme-bg-color", property: "background-color", value : "#FFF !important" } ]
-            for(var i = 0; i < styles.length; i ++) {
-                $(styles[i].cssRule).css(styles[i].property, styles[i].value);
-            }
-        },
-        livePreviewUpdateLayoutOptions: function (options) {
-            for (var i = 0; i < this.modules.length; i++) {
-                this.modules[i].templateName = options.templateName;
-            }
-            ideaPress.hub.html("");
-            var promises = ideaPress.renderModules();
-            RSVP.all(promises).then(function () {
-                ideaPress.hub.update();
-                ideaPress.hub.navigateTo();
-            });
-            
-        },
-        livePreviewUpdateContent: function (contents) {
-        },
         
     };
 
