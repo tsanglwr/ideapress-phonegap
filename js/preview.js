@@ -14,7 +14,7 @@ var preview = function () {
             ideaPress.options.modules = [];
             var count = 1;
             for (var i in modules) {
-                var m = { name: type == 0 ? wordpressModule : wordpresscomModule, options: { id: count++, siteDomain: modules[i].siteDomain, title: modules[i].title, typeId: modules[i].typeId, categoryId: modules[i].categoryId, showHub: true, hubSize: 1, templateName: "wpc-tpl-0" } };
+                var m = { name: type == 0 ? wordpressModule : wordpresscomModule, options: { id: count++, siteDomain: modules[i].siteDomain, title: modules[i].title, typeId: modules[i].typeId, categoryId: modules[i].categoryId, showHub: true, hubSize: 1, templateName: modules[i].templateName } };
                 ideaPress.options.modules.push(m);
             }
             ideaPress.modules = [];
@@ -82,7 +82,7 @@ var preview = function () {
                     oldModules[found].id = count++;
                     ideaPress.modules.push(oldModules[found]);
                 } else {
-                    var m = { name: type == 0 ? wordpressModule : wordpresscomModule, options: { id: count++, siteDomain: modules[i].siteDomain, title: modules[i].title, typeId: modules[i].typeId, categoryId: modules[i].categoryId, showHub: true, hubSize: 1, templateName: "wpc-tpl-0" } };
+                    var m = { name: type == 0 ? wordpressModule : wordpresscomModule, options: { id: count++, siteDomain: modules[i].siteDomain, title: modules[i].title, typeId: modules[i].typeId, categoryId: modules[i].categoryId, showHub: true, hubSize: 1, templateName: modules[i].templateName } };
                     ideaPress.options.modules.push(m);
                     var module = m.name;
                     var options = m.options;
