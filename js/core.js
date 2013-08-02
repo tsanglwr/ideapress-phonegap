@@ -4,10 +4,11 @@ File: core.js
 Author: IdeaNotion
 Description: Control and maintain core logics of the application
 */
+
 var ideaPress = function () { 
     var instance = {
         // Change Storage Version to empty the local storage
-        localStorageSchemaVersion : '20130515-1',
+        localStorageSchemaVersion : '20130515-2',
         modules : [],
         options : { },
         initialized : false,
@@ -69,13 +70,28 @@ var ideaPress = function () {
             console.log("ideaPress.renderModules(): Exit");
             return promises;
         },
-        
+         
         update: function (page) {
-            var self = this;
-            view.gotoPage(this.modules[this.currentModule].pageContainer);
-            this.globalFetch = this.modules[this.currentModule].update(page).then(function () {
-                self.globalFetch = false;
+            //TODO
+            //we need to clean the localstorage
+
+            this.hub.html("");
+            this.hub.update();
+            ideaPress.clearMenuItems();
+            var promises = [];
+            for (var i in this.modules) {
+                if (ideaPress.modules[i].showHub) {
+                    console.log("ideaPress.renderModules(): rendering modules: " + i);
+                    promises.push(ideaPress.modules[i].render(this.hub));
+                }
+            }
+ 
+            RSVP.all(promises).then(function () {
+
+                ideaPress.hub.update();
+                ideaPress.hub.navigateTo();
             });
+            
         },
 
 
@@ -99,20 +115,18 @@ var ideaPress = function () {
         addMenuItem: function (title, id, rel) {
             var item = $("<li class='menu_item' rel='" + rel + "' id='menu_item_" + id + "'><a href='#" + id + "'>" + title + "</a></li>");
             var menus = $('#menu_list li');
-            for(var i = 1 ; i < menus.length; i++) {
+            for (var i = 1 ; i < menus.length; i++) {
                 if (parseInt($(menus[i]).attr('rel')) > rel) {
                     item.insertAfter($(menus[i - 1]));
                     return;
                 }
             }
             $('#menu_list').append(item);
-
         },
         
         removeMenuItem: function (id) {
             $('#menu_list #menu_item_' + id).remove();
         },
-        
         clearMenuItems: function () {
             $('#menu_list .menu_item').remove();
         },
@@ -123,6 +137,7 @@ var ideaPress = function () {
 
         hideMenu: function() {
             $.ui.toggleSideMenu(false);
+            
         },
     
         // TODO: Show external URL
@@ -139,7 +154,6 @@ var ideaPress = function () {
         search: function (searchQuery) {
             this.searchModule.search(searchQuery);
         },
-        
         
     };
 
