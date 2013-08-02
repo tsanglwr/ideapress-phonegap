@@ -5,16 +5,18 @@
 #afui input[type=search].searchButton {
     width: 100px;
     border-radius: 10px;
-    height: 33px;
+    height: 28px;
     margin: 4px;
     position: relative;
-    background-image: url('../img/search.png');
+    background-image: url('../img/search-icon-background.png');
+    background-size: contain;
     background-position: left;
     background-repeat: no-repeat;
     padding-left: 23px;
     padding-top: 0px;
     padding-bottom: 0px;
 }
+
 .wpc-hub-title {
 }
 
@@ -40,10 +42,21 @@
 }
 
 .bookmarkButton {
-    display: inline-block;
     background-image: url('../img/bookmark.png');
+    display: inline-block;    
     height: 20px;
     width: 20px;
     top: 10px;
     position: relative;
+    background-size: cover;
+}
+
+.searchShowButton {
+    background-image: url('../img/search-icon.png');
+    display: inline-block;    
+    height: 20px;
+    width: 20px;
+    top: 10px;
+    position: relative;
+    background-size: cover;
 }

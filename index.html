@@ -112,8 +112,15 @@
                 $.ajaxSettings.dataType = "json";                
             }
             
-   
-    $.ui.ready(function () {
+            function showSearch() {
+                $('#searchButton').show();
+                $('#searchShowButton').hide();
+            }
+
+            $.ui.ready(function () {
+
+ 
+
 
 var myScroller=$("#ip-hub").scroller({
     scrollBars: true,
@@ -148,9 +155,10 @@ function fetchRemoteContent(scroller){
             <div id="header" class="ip-header">
                 <a href="#" class="menuButton" style="float:left;" onclick="$.ui.toggleSideMenu()"></a>
                 
-                <!--<input type="button" href="#" class="bookmarkButton" style="float:left;" id="bookMarkButton" value="bmark" />-->
-                <a href="#" class="bookmarkButton" id="bookMarkButton" style="margin-left:7px;"/></a>
-                <input type="search" id="searchButton" class="searchButton" style="float:right;" onchange="ideaPress.search($(this).val());" />
+                <!--<input type="button" href="#" class="bookmarkButton" style="float:left;" id="bookMarkButton" value="bmark" />-->                
+                <a href="#" class="bookmarkButton" id="bookMarkButton" style="margin-right:3px; float:right"/></a>
+                <input type="search" id="searchButton" class="searchButton" style="float:right; display:none;" onchange="ideaPress.search($(this).val());" />
+                <a href="#" class="searchShowButton" id="searchShowButton" style="margin-right:3px; float:right" onclick="showSearch()"/></a>
             </div>
             <div id="content" >
                 <div id="ip-hub" class="panel" selected="true">
