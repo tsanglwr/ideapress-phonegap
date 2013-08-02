@@ -4,6 +4,16 @@
 
 #afui input[type=search].searchButton {
     width: 100px;
+    border-radius: 10px;
+    height: 33px;
+    margin: 4px;
+    position: relative;
+    background-image: url('../img/search.png');
+    background-position: left;
+    background-repeat: no-repeat;
+    padding-left: 23px;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 .wpc-hub-title {
 }
@@ -22,3 +32,18 @@
     border-radius:0;    
     background:#5C5C5C;
  }
+#ip-hub.panel
+{
+	background-image: url('../img/ajax-loader.gif')!important;
+	background-repeat:no-repeat!important;
+	background-position:50% 5%; 
+}
+
+.bookmarkButton {
+    display: inline-block;
+    background-image: url('../img/bookmark.png');
+    height: 20px;
+    width: 20px;
+    top: 10px;
+    position: relative;
+}
