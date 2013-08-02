@@ -165,3 +165,42 @@
 </script>
 
 
+<script id="wp-tpl-4-hub" type="text/html">
+    <h2 class="wp-hub-title ip-theme-bg-color-a" rel="{{id}}">{{title}}</h2>
+    <div class="wpc-hub-list" >
+        {{#posts}}
+        <div class="wp-post-div" rel="{{id}}">
+            <div class="wp-tpl-4-img" style="background-image:url('{{imgThumbUrl}}');background-size:cover;">                
+            </div>
+            <div class="wp-tpl-4-overlay">
+                <h4 class="wp-post-title">{{title}}</h4>
+                <p class="wp-post-subtitle">{{description}}</p>
+                <p class="wp-post-ago">{{ago}}</p>
+            </div>
+        </div>
+    {{/posts}}			
+    </div>    
+</script>
+<script id="wp-tpl-4-list" type="text/html">
+    <div class="wp-list" >
+        {{#posts}}
+        <div class="wp-post-div" rel="{{id}}">
+            <div class="wp-tpl-4-img" style="background-image:url('{{imgThumbUrl}}');background-size:cover;">                
+            </div>
+            <div class="wp-tpl-4-overlay">
+                <h4 class="wp-post-title">{{title}}</h4>
+                <p class="wp-post-subtitle">{{description}}</p>
+                <p class="wp-post-ago">{{ago}}</p>
+            </div>
+        </div>
+        {{/posts}}			
+    </div>
+</script>
+<script id="wp-tpl-4-post-content" type="text/html">    
+    <div style="height:220px;background-image:url('{{imgUrl}}');background-size:cover;">
+    </div>
+    <div class="wp-post" >
+        <h1>{{title}}</h1>
+        <p>{{{content}}}</p>
+    </div>
+</script>

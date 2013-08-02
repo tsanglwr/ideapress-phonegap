@@ -10,9 +10,9 @@
         hubPage : true,
         menu: 'left',
         modules: [
-     		  //{ name: wordpressModule, options: { id: 1, siteDomain: 'http://ideanotion.net', title: "Recent News", typeId: wordpressModule.MOSTRECENT, showHub: true, hubSize: 1, templateName: "wp-tpl-3" } }
-             { name: wordpressModule, options: { id: 3, siteDomain: 'http://ideanotion.net', title: "Recent News", typeId: wordpressModule.MOSTRECENT,  showHub: true, hubSize: 6, templateName: "wp-tpl-3" } }
-            , { name: wordpressModule, options: { id: 4, siteDomain: 'http://ideanotion.net', title: "Open Source", typeId: wordpressModule.CATEGORY, categoryId: 53, showHub: true, hubSize: 6, templateName: "wp-tpl-3" } }
+     		  { name: wordpressModule, options: { id: 1, siteDomain: 'http://ideanotion.net', title: "Recent News", typeId: wordpressModule.MOSTRECENT, showHub: true, hubSize: 1, templateName: "wp-tpl-0" } }
+            , { name: wordpressModule, options: { id: 3, siteDomain: 'http://ideanotion.net', title: "Recent News", typeId: wordpressModule.MOSTRECENT,  showHub: true, hubSize: 6, templateName: "wp-tpl-0" } }
+            , { name: wordpressModule, options: { id: 4, siteDomain: 'http://ideanotion.net', title: "Open Source", typeId: wordpressModule.CATEGORY, categoryId: 53, showHub: true, hubSize: 6, templateName: "wp-tpl-0" } }
         ]
         //,searchModule: { name: wordpresscomModule, options: { id: 6, siteDomain: 'cbsnewyork.wordpress.com', title: 'Search', typeId: wordpresscomModule.SEARCH, templateName: "wpc-tpl-0" } }
     };

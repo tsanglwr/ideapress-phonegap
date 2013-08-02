@@ -188,3 +188,75 @@ body {
     color: #fff;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjEwMPRyoQAAAA1JREFUGFdjYGBgaAAAAIUAgbVRNccAAAAASUVORK5CYII=);
 }
+
+/* wpc-tpl-4 */
+.wpc-tpl-4 .wp-hub-div .wp-post-div .wp-post-title, .wpc-tpl-4 .wp-hub-div:first-child .wp-post-div .wp-post-subtitle {
+    width: 90%;  
+} 
+#content .wp-post-div .wp-post-title {
+    font-size: 90%;  
+} 
+
+#content .wpc-tpl-4 .wp-hub-title {
+    font-size: 100%;
+    color: #fff;
+}
+
+.wpc-tpl-4 .wp-list, .wpc-tpl-4 .wp-hub-list { overflow: hidden; }
+.wpc-tpl-4 .wp-hub-div:first-child { height: 246px; background-color: #454545;}
+#content .wpc-tpl-4 .wp-hub-div:first-child .wp-hub-title {
+    text-transform: uppercase;
+    padding: 4px 4px;
+    clear: both;
+    background-color: transparent !important;
+    color: #fff;
+}
+
+.wpc-tpl-4  .wp-post-div {
+    height: 220px;
+}
+.wpc-tpl-4 .wp-post-div .wpc-tpl-4-img {
+    height: 220px;
+    border-bottom: solid blue 2px;
+}
+
+.wpc-tpl-4 .wp-post-div .wpc-tpl-4-overlay {
+    position: relative;
+    z-index: 1;
+    top: -60px;
+    height: 60px;
+    padding: 4px 10px;
+    background-repeat: repeat;
+    color: #fff;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjEwMPRyoQAAAA1JREFUGFdjYGBgaAAAAIUAgbVRNccAAAAASUVORK5CYII=);
+}
+
+#content .wpc-tpl-4 .wp-post-ago {
+    text-align:right;
+    font-size: 60%;
+}
+
+.wpc-tpl-4 .wp-list .wp-hub-title {
+    clear: both;
+    float: right;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    margin: 15px;
+    color: #fff;
+}
+.wpc-tpl-4 .wp-list .wp-post-div {
+    height: 80px;
+}
+.wpc-tpl-4 .wp-list .wp-post-div .wpc-tpl-4-img {
+    height: 60px;
+    width: 60px;
+    float: left;
+    margin: 10px 10px 0;
+}
+
+.wpc-tpl-4 .wp-list .wp-post-div  .wpc-tpl-4-overlay {
+    padding-top: 15px;
+    padding-right: 15px;
+    top: 10px;
+    z-index: -1;
+}
