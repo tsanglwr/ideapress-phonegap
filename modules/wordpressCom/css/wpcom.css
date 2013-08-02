@@ -140,3 +140,51 @@ body {
     font-size: 80%;
 }
 
+/* wpc-tpl-3 */
+.wpc-tpl-3 .wpc-hub-title, .wpc-tpl-3 .wpc-post-title, .wpc-tpl-3 .wpc-post-subtitle {
+    max-width: 90%;
+}
+
+.wpc-tpl-3 .wpc-post-div {
+    /*min-height: 220px;*/
+    overflow: hidden;
+    width: 45%;
+    float: left;
+    height: 155px;
+    margin-left: 2%;
+}
+
+.wpc-tpl-3 .wpc-hub-div .wpc-post-div .wpc-tpl-3-img {
+    height: 150px;
+    padding: 3px;
+    margin: 2px;
+}
+
+.wpc-tpl-3 .wpc-hub-title {
+    clear: both;
+    font-size: 120%!important;
+}
+
+
+.wpc-tpl-3 .wpc-post-div .wpc-post-title {
+    font-size: 110%;
+    
+}
+.wpc-tpl-3 .wpc-post-div .wpc-post-subtitle {
+    font-size: 80%;
+}
+
+.wpc-tpl-3 .wpc-hub-div .wpc-post-div .wpc-post-title, .wpc-tpl-3 .wpc-hub-div .wpc-post-div .wpc-post-subtitle {
+    width: 90%;  
+} 
+
+.wpc-tpl-3 .wpc-hub-div .wpc-post-div .wpc-tpl-3-overlay {
+    position: relative;
+    z-index: 1;
+    top: -60px;
+    height: 60px;
+    padding: 4px 10px;
+    background-repeat: repeat;
+    color: #fff;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjEwMPRyoQAAAA1JREFUGFdjYGBgaAAAAIUAgbVRNccAAAAASUVORK5CYII=);
+}
