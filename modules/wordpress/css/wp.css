@@ -1,4 +1,4 @@
-﻿/* overall */
+/* overall */
 body {
     /*font-family: 'Roboto', sans-serif;*/
     font-family: 'Roboto Condensed', sans-serif;
@@ -139,6 +139,57 @@ body {
 .wp-tpl-1 .wp-post-div .wp-post-subtitle {
     font-size: 80%;
 }
+
+
+/* wp-tpl-3 */
+.wp-tpl-3 .wp-hub-title, .wp-tpl-3 .wp-post-title, .wp-tpl-3 .wp-post-subtitle {
+    max-width: 90%;
+}
+
+.wp-tpl-3 .wp-post-div {
+    /*min-height: 220px;*/
+    overflow: hidden;
+    width: 45%;
+    float: left;
+    height: 155px;
+    margin-left: 2%;
+}
+
+.wp-tpl-3 .wp-hub-div .wp-post-div .wp-tpl-3-img {
+    height: 150px;
+    padding: 3px;
+    margin: 2px;
+}
+
+.wp-tpl-3 .wp-hub-title {
+    clear: both;
+    font-size: 120%!important;
+}
+
+
+.wp-tpl-3 .wp-post-div .wp-post-title {
+    font-size: 110%;
+    
+}
+.wp-tpl-3 .wp-post-div .wp-post-subtitle {
+    font-size: 80%;
+}
+
+.wp-tpl-3 .wp-hub-div .wp-post-div .wp-post-title, .wp-tpl-3 .wp-hub-div .wp-post-div .wp-post-subtitle {
+    width: 90%;  
+} 
+
+.wp-tpl-3 .wp-hub-div .wp-post-div .wp-tpl-3-overlay {
+    position: relative;
+    z-index: 1;
+    top: -60px;
+    height: 60px;
+    padding: 4px 10px;
+    background-repeat: repeat;
+    color: #fff;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAadEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjEwMPRyoQAAAA1JREFUGFdjYGBgaAAAAIUAgbVRNccAAAAASUVORK5CYII=);
+}
+
 
 /* wp-tpl-4 */
 .wp-tpl-4 .wp-hub-div .wp-post-div .wp-post-title, .wp-tpl-4 .wp-hub-div:first-child .wp-post-div .wp-post-subtitle {

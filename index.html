@@ -21,8 +21,9 @@
     <head>
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
-        <!-- <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=384px,, height=device-height, target-densitydpi=device-dpi" /> -->
+        <!-- <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=384px,, height=device-height, target-densitydpi=device-dpi" /> -->                
         <meta name="viewport" content="width=384,target-densitydpi=device-dpi,height=800" />
+
         <link rel="stylesheet" type="text/css" href="css/af.ui.base.css" />
         <link rel="stylesheet" type="text/css" href="css/icons.css" />
         
@@ -51,7 +52,7 @@
             }
             else {
                 //LOCALPATH = "file://www/";
-                LOCALPATH = "file://www/";
+                LOCALPATH = "file:///android_asset/www/";
                 document.write("<script type='text/javascript' src='cordova.js'><\/script>");
             }
             
@@ -110,9 +111,34 @@
             else {
                 $.ajaxSettings.dataType = "json";                
             }
-
             
+   
+    $.ui.ready(function () {
 
+var myScroller=$("#ip-hub").scroller({
+    scrollBars: true,
+    verticalScroll: true,
+    horizontalScroll: false,
+    vScrollCSS: "jqmScrollbar",
+    hScrollCSS: "jqmScrollbar"
+});
+myScroller.addPullToRefresh();
+
+
+$.ui.scrollingDivs['ip-hub'].addPullToRefresh();
+
+        $.bind(myScroller, "refresh-release", function() {
+            //call update function
+            ideaPress.update();
+        });
+
+function fetchRemoteContent(scroller){
+	alert('cancel');
+
+    //load content
+    scroller.hideRefresh();
+}
+    });
         </script>
 
         <title></title>
@@ -125,7 +151,7 @@
                 <input type="button" href="#" class="bookmarkButton" style="float:left;" id="bookMarkButton" value="bmark" />
                 <input type="search" id="searchButton" class="searchButton" style="float:right;" onchange="ideaPress.search($(this).val());" />
             </div>
-            <div id="content">
+            <div id="content" >
                 <div id="ip-hub" class="panel" selected="true">
                     <h1>Loading...</h1>
                 </div>

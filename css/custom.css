@@ -19,7 +19,7 @@
     color: #666;
 }
 /* header_font_color ?? white or black?? */
-#afui #header h1{color:#000}
+#afui #header h1{color:#fff}
 
 /*Content background color*/
 #afui #content, #afui .panel {
