@@ -1,6 +1,6 @@
 var util = {
     // Check local storage schema version
-    checkLocalStorageSchemaVersion: function () {
+    checkLocalStorageSchemaVersion: function () {        
         if (typeof(window.localStorage) == 'undefined'||null == window.localStorage || null == window.localStorage.schemaVersion || window.localStorage.schemaVersion != ideaPress.localStorageSchemaVersion) {
 
             util.clearLocalStorage();
@@ -10,16 +10,16 @@ var util = {
     // Clear all local storage
     clearLocalStorage: function () {
         window.localStorage.clear();
-        window.localStorage.schemaVersion = this.localStorageSchemaVersion;
+        window.localStorage.schemaVersion = ideaPress.localStorageSchemaVersion;
     },
 
     // 
     loadFromStorage : function (key) {
-        return window.localStorage.getItem(key);
+        return /*window.*/localStorage.getItem(key);
     },
     
     saveToStorage : function (key, obj) {
-        return window.localStorage.setItem(key, obj);
+        return /*window.*/localStorage.setItem(key, obj);
     },
 
     // Helper method to convert DateTime to readable format

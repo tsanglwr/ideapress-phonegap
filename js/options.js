@@ -32,7 +32,7 @@
         menu: 'left',
         modules: [
              { name: wordpresscomModule, options: { id: 1, siteDomain: 'winphankyle.wordpress.com', title: "Recent News", typeId: wordpresscomModule.MOSTRECENT, showHub: true, hubSize: 2, templateName: "wpc-tpl-3" } }
-            , { name: wordpresscomModule, options: { id: 2, siteDomain: 'winphankyle.wordpress.com', title: 'bookmark', typeId: wordpresscomModule.BOOKMARKS, showHub: true, hubSize: 1, templateName: "wpc-tpl-3" } }
+            , { name: wordpresscomModule, options: { id: 2, siteDomain: 'winphankyle.wordpress.com', title: 'bookmark', typeId: wordpresscomModule.BOOKMARKS, showHub: true, hubSize:6, templateName: "wpc-tpl-3" } }
             //,{ name: wordpresscomModule, options: { id: 2, siteDomain: 'winphankyle.wordpress.com', title: "Recent News", typeId: wordpresscomModule.MOSTRECENT, showHub: true, hubSize: 4, templateName: "wpc-tpl-1" } }
             //, { name: wordpresscomModule, options: { id: 3, siteDomain: 'winphankyle.wordpress.com', title: "News", typeId: wordpresscomModule.CATEGORY, categoryId: "news", showHub: true, hubSize: 4, templateName: "wpc-tpl-3" } }
             //, { name: wordpresscomModule, options: { id: 5, siteDomain: 'winphankyle.wordpress.com', title: "Apps", typeId: wordpresscomModule.CATEGORY, categoryId: "apps", showHub: true, hubSize: 4, templateName: "wpc-tpl-3" } }
