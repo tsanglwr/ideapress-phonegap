@@ -93,9 +93,28 @@ var ideaPress = function () {
             });
             
         },
+        
+        refreshHub: function () {
+            this.hub.html("");
+            this.hub.update();
+            ideaPress.clearMenuItems();
+            var promises = [];
+            for (var i in this.modules) {
+                if (ideaPress.modules[i].showHub) {
+                    console.log("ideaPress.renderModules(): rendering modules: " + i);
+                    promises.push(ideaPress.modules[i].render(this.hub));
+                }
+            }
+ 
+            RSVP.all(promises).then(function () {
+
+                ideaPress.hub.update();
+               
+            });
+        },
 
 
-        // Call each module to refresh its content or data store
+            // Call each module to refresh its content or data store
         refresh: function() {      
             this.modules[currentModule].refresh(true);
 

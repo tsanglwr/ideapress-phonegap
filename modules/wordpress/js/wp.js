@@ -85,45 +85,50 @@ wordpressModule.prototype.render = function (hub) {
     self.hubContainer = hub.createSection("wp-hub-section-" + self.id, self.templateName + "-hub");
     self.hubContainer.addClass("wp-hub-div");
 
-    /*
+    
     if (self.typeId === wordpresscomModule.BOOKMARKS) {
         if (self.list.length == 0) {
-            var content = self.container.querySelector(".mp-module-content");
-            content.parentNode.className = content.parentNode.className + ' hide';
-           
-           
+            //var content = self.container.querySelector(".mp-module-content");
+            //content.parentNode.className = content.parentNode.className + ' hide';
+
+
         }
         promise.resolve();
     }
-    else {*/
-    
-    self.fetch(0).then(function () {
+    else {
 
+        self.fetch(0).then(function() {
+            if (self.list.length == 0) {
 
-        var viewData = { posts: [], title: self.title, id: self.id };
-        for (var i = 0; i < Math.min(self.hubSize, self.list.length); i++) {
-            viewData.posts.push(self.list[i]);
-        }
-        var content = $.Mustache.render(self.templateName + "-hub", viewData);
-        // setup event handlers
-        self.hubContainer.html(content);
-        $('#content #ip-hub').on('click', "#wp-hub-section-" + self.id + ' .wp-hub-title', function(e) { self.showCategory(this, self); });
-        $('#content #ip-hub').on('click', "#wp-hub-section-" + self.id + ' .wp-post-div', function (e) { self.showPost(this, self); });
-        
-        $('#header').on('click', '#bookMarkButton', function (e) {
-            
-            self.addBookmark(this, self);
+                self.hubContainer.addClass('hide');
+                promise.resolve();
+            } else {
+
+                var viewData = { posts: [], title: self.title, id: self.id };
+                for (var i = 0; i < Math.min(self.hubSize, self.list.length); i++) {
+                    viewData.posts.push(self.list[i]);
+                }
+                var content = $.Mustache.render(self.templateName + "-hub", viewData);
+                // setup event handlers
+                self.hubContainer.html(content);
+                $('#content #ip-hub').on('click', "#wp-hub-section-" + self.id + ' .wp-hub-title', function(e) { self.showCategory(this, self); });
+                $('#content #ip-hub').on('click', "#wp-hub-section-" + self.id + ' .wp-post-div', function(e) { self.showPost(this, self); });
+
+                $('#header').on('click', '#bookMarkButton', function(e) {
+
+                    self.addBookmark(this, self);
+                });
+
+                // render Panel
+                self.renderPanel();
+                ideaPress.addMenuItem(self.title, 'wp-module-' + self.id, self.id);
+
+                promise.resolve();
+            }
+        }, function() {
+            promise.reject();
         });
-        
-        // render Panel
-        self.renderPanel();
-        ideaPress.addMenuItem(self.title, 'wp-module-' + self.id, self.id);
-        
-        promise.resolve();
-    }, function() {
-        promise.reject();
-    });
-
+    }
     return promise;
 };
 
@@ -576,10 +581,11 @@ wordpressModule.prototype.addBookmark = function (e, module) {
             post = module.list[i];
     }
 
-
+    
     var isBookmarked = this.checkIsBookmarked(postId);
+    
     if (!isBookmarked) {
-        var copyItem = ideaPress.clone(post);
+        var copyItem = util.clone(post);
         
         var self = this;
 
