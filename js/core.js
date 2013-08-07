@@ -59,7 +59,10 @@ var ideaPress = function () {
             console.log("ideaPress.renderModules(): Enter");
 
             var promises = [];
-            this.hub = view.createPanel("ip-hub", this.modules[0].templateName, this.options.appTitle);
+            
+            this.hub = view.createPanel("ip-hub", this.modules[0].templateName, this.options.appTitle, function () {
+                ideaPress.update();
+            });
             for (var i in this.modules) {
                 if (this.modules[i].showHub) {
                     console.log("ideaPress.renderModules(): rendering modules: " + i);
@@ -70,13 +73,15 @@ var ideaPress = function () {
             console.log("ideaPress.renderModules(): Exit");
             return promises;
         },
-         
+        
+        
         update: function (page) {
             //TODO
             //we need to clean the localstorage
 
-            this.hub.html("");
-            this.hub.update();
+            //this.hub.html("");
+            this.hub.clearHtml();
+//            this.hub.update();
             ideaPress.clearMenuItems();
             var promises = [];
             for (var i in this.modules) {
@@ -90,6 +95,7 @@ var ideaPress = function () {
 
                 ideaPress.hub.update();
                 ideaPress.hub.navigateTo();
+                
             });
             
         },

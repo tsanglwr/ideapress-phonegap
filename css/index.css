@@ -37,11 +37,34 @@
 
 #ip-hub.panel
 {
-	background-image: url('../img/ajax-loader.gif')!important;
+	/*background-image: url('../img/ajax-loader.gif')!important;
 	background-repeat:no-repeat!important;
-	background-position:50% 5%; 
+	background-position:50% 5%; */
 }
 
+.refreshImageBlock{
+    background-image: url('../img/ajax-loader.gif');
+	background-repeat:no-repeat!important;
+	/*background-position:50% 5%;*/
+    background-size: cover;
+    height: 40px;
+    width: 40px;
+    float: left;
+    margin-top: 11px;
+}
+.refreshBlock{
+    height:60px;
+    font-size:30px;
+    margin-top:-60px;
+}
+.refreshContainer {
+    margin:0 auto;width:400px;position:relative
+}
+.refreshLabel {
+    float: left;
+    margin-top: 10px;
+    margin-left: 18px;
+}
 #bookmarkButton {
     background-image: url('../img/bookmark.png');    
 }

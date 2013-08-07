@@ -4,16 +4,37 @@ File: core.js
 Author: IdeaNotion
 Description: Control and maintain core logics of the application
 */
-var view = function() {
+var view = function () {
+    var refreshblock = "<div class='refreshBlock' ><div class='refreshContainer'><div class='refreshImageBlock'></div><div class='refreshLabel'>RELEASE ME TO REFRESH</div></div></div>";
     var instance = {
-
-        createPanel: function(id, cssName, title) {
-            var panel = $("<div id='" + id + "' class='content'></div>");
+        
+        createPanel: function (id, cssName, title, refreshCallback) {
+            var block = refreshblock;
+            if (!refreshCallback) {
+                block = "";
+            }
+            var panel = $("<div id='" + id + "' class='content'>" + block + "</div>");
             panel.cssName = cssName;
             if ($('#content #' + panel.attr('id')).length == 0) {
                 $.ui.addContentDiv("#" + panel.attr('id'), panel.html(), "");
             }
+            if (refreshCallback) {
+                //hook 
+                var myScroller = $("#"+id).scroller({
+                    scrollBars: true,
+                    verticalScroll: true,
+                    horizontalScroll: false,
+                    vScrollCSS: "jqmScrollbar",
+                    hScrollCSS: "jqmScrollbar"
+                });
+                myScroller.addPullToRefresh();
+                //$.ui.scrollingDivs['ip-hub'].addPullToRefresh();
 
+                $.bind(myScroller, "refresh-release", function () {
+                    $('#' + id + ' .refreshBlock').css('margin', '0');
+                    refreshCallback();                    
+                });
+            }
             panel.update = function() {
 
                 $.ui.updatePanel("#" + panel.attr('id'), panel.html());
@@ -39,6 +60,9 @@ var view = function() {
                 section.addClass(clsName);
                 $(panel).append(section);
                 return section;
+            };
+            panel.clearHtml = function() {
+                $(this).html(block);
             };
             return panel;
         },
