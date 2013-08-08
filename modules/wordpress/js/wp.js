@@ -68,6 +68,11 @@ share.show({
             });
         
         wordpressModule.initialized = true;
+        
+        $('#header').on('click', '#bookMarkButton', function (e) {
+            self.addBookmark(this, self);
+            return false;
+        });
     } else {
         console.log("wp.initialize() [" + self.id + "]: Resolve");
         promise.resolve();
@@ -113,11 +118,6 @@ wordpressModule.prototype.render = function (hub) {
                 self.hubContainer.html(content);
                 $('#content #ip-hub').on('click', "#wp-hub-section-" + self.id + ' .wp-hub-title', function(e) { self.showCategory(this, self); });
                 $('#content #ip-hub').on('click', "#wp-hub-section-" + self.id + ' .wp-post-div', function(e) { self.showPost(this, self); });
-
-                $('#header').on('click', '#bookMarkButton', function(e) {
-
-                    self.addBookmark(this, self);
-                });
 
                 // render Panel
                 self.renderPanel();
@@ -343,6 +343,27 @@ wordpressModule.prototype.saveToStorage = function (data) {
 wordpressModule.prototype.showPost = function (e, module) {
     var id = $(e).attr('rel');
     this.currentPostId = id;
+    var self = this;
+    var isBookmarked = this.checkIsBookmarked(id);
+
+    /*var removebookmarkhandler = function() {
+        self.removeBookmark(parseInt(id), self);
+    };*/
+
+    if (isBookmarked) {
+
+        $('#bookMarkButton').hide();
+        $('#unbookMarkButton').show();
+        $('#unbookMarkButton').unbind('click');
+        $('#unbookMarkButton').bind('click', function () {
+            self.removeBookmark(parseInt(id), self);
+            return false;
+        });
+    } else {
+        $('#bookMarkButton').show();
+        $('#unbookMarkButton').hide();
+    }
+
     var post = null;
     for (var i in module.list) {
         if (module.list[i].id == id)
@@ -351,9 +372,9 @@ wordpressModule.prototype.showPost = function (e, module) {
     var p = view.createPanel('wp-post-' + post.id, module.templateName, module.title);
     console.log('show...' + post.title);
 
-    var content = $.Mustache.render(this.templateName + "-post-content", post);
+    var content = $.Mustache.render(self.templateName + "-post-content", post);
     p.append(content);
-    //content.attr("rel", post.id);
+    
     p.navigateTo();
 
 };
@@ -602,11 +623,23 @@ wordpressModule.prototype.addBookmark = function (e, module) {
         util.saveToStorage(self.localStorageBookmarkKey, JSON.stringify(bookmarks));
         
         //updateButton(true);
+        $('#bookMarkButton').hide();
+        $('#unbookMarkButton').show();
+        $('#unbookMarkButton').unbind('click');
+        $('#unbookMarkButton').bind('click', function () {
+            self.removeBookmark(parseInt(copyItem.id), self);
+            return false;
+        });
+
+        ideaPress.refreshHub();
     }
+    return;
 };
 
 // Remove post to bookmark
 wordpressModule.prototype.removeBookmark = function (id) {
+    $('#unbookMarkButton').hide();
+    $('#bookMarkButton').show();
     var self = this;
     var bookmarks = self.getBookmarks();
     for (var index in bookmarks.posts) {
@@ -617,6 +650,7 @@ wordpressModule.prototype.removeBookmark = function (id) {
     }
     bookmarks.post_count = bookmarks.posts.length;
     util.saveToStorage(self.localStorageBookmarkKey, JSON.stringify(bookmarks));
+    ideaPress.refreshHub();
 };
 
 wordpressModule.prototype.searchInit = function () {

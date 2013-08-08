@@ -68,13 +68,11 @@ share.show({
             });
         
         wordpresscomModule.initialized = true;
-
         
         $('#header').on('click', '#bookMarkButton', function (e) {
             self.addBookmark(this, self);
             return false;
-        });
-                
+        });                
     } else {
         console.log("wpc.initialize() [" + self.id + "]: Resolve");
         promise.resolve();
