@@ -103,14 +103,13 @@
         <script type="text/javascript" src="js/options.js"></script>
         <script type="text/javascript">
             app.initialize();
-
+            var AJAXMODE = "json";
 
             if (WEBMODE) {
-                $.ajaxSettings.dataType = "jsonp";
+                //$.ajaxSettings.dataType = "jsonp";
+                AJAXMODE = "jsonp";
             }
-            else {
-                $.ajaxSettings.dataType = "json";                
-            }
+            
             
             function showSearch() {
                 $('#searchButton').show();
@@ -133,36 +132,16 @@
                 $('#unbookMarkButton').hide();
                 $('#bookMarkButton').hide();
                 
-                /*
-            var myScroller=$("#ip-hub").scroller({
-                scrollBars: true,
-                verticalScroll: true,
-                horizontalScroll: false,
-                vScrollCSS: "jqmScrollbar",
-                hScrollCSS: "jqmScrollbar"
-            });
-            myScroller.addPullToRefresh();
-            //$.ui.scrollingDivs['ip-hub'].addPullToRefresh();
+                $.ui.slideSideMenu = false;
+                $.ui.setSideMenuWidth($("#afui").width() - 50);
+           
 
-            $.bind(myScroller, "refresh-release", function () {
+                function fetchRemoteContent(scroller){
+	                alert('cancel');
 
-                //$('#ip-hub').append('<div class="refreshSection">WHAT UP</div>');
-                //$('#ip-hub .afScrollPanel').append('<div class="refreshSection">WHAT UP</div>');
-                
-
-                //$('#ip-hub .afScrollPanel').prepend('<div class="refreshSection">WHAT UP</div>');
-                $('#refreshBlock').css('margin', '0');
-
-                //call update function
-                ideaPress.update();
-            });*/
-
-            function fetchRemoteContent(scroller){
-	            alert('cancel');
-
-                //load content
-                scroller.hideRefresh();
-            }
+                    //load content
+                    scroller.hideRefresh();
+                }
            });
         </script>
 
@@ -174,22 +153,29 @@
                 <a href="#" class="menuButton" style="float:left;" onclick="$.ui.toggleSideMenu()"></a>
                 
                 <input type="button" class="shareButton" style="float:left;" id="shareButton" value="share" onclick="share()"/>
-                <a href="#" class="bookmarkButton" id="bookMarkButton" style="margin-right:3px; float:right; background-image: url('img/bookmark.png');"/></a>
-                <a class="bookmarkButton" id="unbookMarkButton" style="margin-right:3px; float:right; background-image: url('img/bookmarked.png');"/></a>
+                <a href="#" class="bookmarkButton" id="bookMarkButton" style="margin-right:3px; float:right; background-image: url('img/bookmark.png');"></a>
+                <a class="bookmarkButton" id="unbookMarkButton" style="margin-right:3px; float:right; background-image: url('img/bookmarked.png');"></a>
                 <input type="search" id="searchButton" class="searchButton" style="float:right; display:none;" onchange="ideaPress.search($(this).val());" />
-                <a href="#" class="searchShowButton" id="searchShowButton" style="margin-right:3px; float:right" onclick="showSearch()"/></a>
+                <a href="#" class="searchShowButton" id="searchShowButton" style="margin-right:3px; float:right" onclick="showSearch()"></a>
                                 
             </div>
             
-            <div id="content" >
-                <div class="refreshSection">WHAT UP</div>
+            <div id="content" >                
                 <div id="ip-hub" class="panel" selected="true">                    
                     <h1>Loading...</h1>
+                </div>
+             
+                <div id="ip-about" class="panel" modal="true" data-defer="about.html?t=1">
+                   <div style="margin:20px;">Hello world,<br/>
+                    <p>This is a page about IdesPress</p>
+                    </div>
                 </div>
             </div>
         <nav id="main_menu">            
             <ul id="menu_list" class="list">
                 <li id="menu_home" rel="0"><a href="#ip-hub">Home</a></li>
+                
+                <li id="about_ideapress" rel="100"><a href="#ip-about">About</a></li>
             </ul>
         </nav>   
         </div>    

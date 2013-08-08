@@ -224,7 +224,7 @@ wordpresscomModule.prototype.fetch = function (page) {
             self.fetching = $.ajax({
                 type: 'GET',
                 url: fullUrl,
-                xxx : true,
+                dataType: AJAXMODE,
                 headers: headers,
                 cache: false,
                 success: function(r) {
@@ -676,7 +676,7 @@ wordpresscomModule.prototype.search = function (query) {
         self.fetching = $.ajax({
             type: 'GET',
             url: fullUrl,
-            xxx: true,
+            dataType: AJAXMODE,
             headers: headers,
             cache: false,
             success: function (r) {
