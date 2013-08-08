@@ -300,7 +300,7 @@ wordpressModule.prototype.fetch = function (page) {
 // Check if module show call API or read from local storage
 wordpressModule.prototype.shouldFetch = function (localStorageObject, page) {
     // TODO: turn off localstorage for development
-    return true;
+    //return true;
     if (localStorageObject) {
         if (page && page > this.maxPagingIndex) {
             return true;
