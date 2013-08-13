@@ -18,28 +18,33 @@ var view = function () {
             if ($('#content #' + panel.attr('id')).length == 0) {
                 $.ui.addContentDiv("#" + panel.attr('id'), panel.html(), "");
             }
-            if (refreshCallback) {
-                //hook 
-                var myScroller = $("#"+id).scroller({
-                    scrollBars: true,
-                    verticalScroll: true,
-                    horizontalScroll: false,
-                    vScrollCSS: "jqmScrollbar",
-                    hScrollCSS: "jqmScrollbar"
-                });
-                myScroller.addPullToRefresh();
-                //$.ui.scrollingDivs['ip-hub'].addPullToRefresh();
-
-                $.bind(myScroller, "refresh-release", function () {
-                    $('#' + id + ' .refreshBlock').css('margin', '0');
-                    refreshCallback();                    
-                });
-            }
+            panel.refreshCallback = refreshCallback;
             panel.update = function() {
-
-                $.ui.updatePanel("#" + panel.attr('id'), panel.html());
-                $('#content #' + panel.attr('id')).attr("class", "panel");
-                $('#content #' + panel.attr('id')).addClass(panel.cssName);
+               $.ui.updatePanel("#" + panel.attr('id'), panel.html());
+               $('#content #' + panel.attr('id')).attr("class", "panel");
+               $('#content #' + panel.attr('id')).addClass(panel.cssName);
+                
+               if (this.refreshCallback) {
+                   //hook 
+                   var myScroller = $("#" + id).scroller({
+                       scrollBars: true,
+                       verticalScroll: true,
+                       horizontalScroll: false,
+                       vScrollCSS: "jqmScrollbar",
+                       hScrollCSS: "jqmScrollbar"
+                   });
+                   myScroller.addPullToRefresh();
+                   //myScroller.refresh = true;
+                   //$.ui.scrollingDivs['ip-hub'].addPullToRefresh();
+                   if (!this.isBind) {
+                       $.bind(myScroller, "refresh-release", function () {
+              
+                           $('#' + id + ' .refreshBlock').css('margin', '0');
+                           refreshCallback();
+                       });
+                       this.isBind = true;
+                   }
+               }
             };
             panel.navigateTo = function (effect) {                
                 panel.update();
@@ -62,7 +67,7 @@ var view = function () {
                 return section;
             };
             panel.clearHtml = function() {
-                $(this).html(block);
+               $(this).html(block);
             };
             return panel;
         },
