@@ -95,3 +95,7 @@
 .hide {
     display: none;
 }
+
+.afscroll_refresh {
+    display: none;
+}
