@@ -99,3 +99,59 @@
 .afscroll_refresh {
     display: none;
 }
+
+@font-face {
+  font-family: 'SueEllenFrancisco';
+  font-style: normal;
+  font-weight: 400;
+  src:  url("../fonts/SueEllenFrancisco.ttf") format('truetype');
+
+}
+
+@font-face {
+  font-family: 'RobotoThin';
+  font-style: normal;
+  font-weight: 400;
+  src:  url("../fonts/RobotoThin.ttf") format('truetype');
+
+}
+
+@font-face {
+  font-family: 'RobotoRegular';
+  font-style: normal;
+  font-weight: 400;
+  src:  url("../fonts/RobotoRegular.ttf") format('truetype');
+
+}
+
+@font-face {
+  font-family: 'QwigleyRegular';
+  font-style: normal;
+  font-weight: 400;
+  src:  url("../fonts/QwigleyRegular.ttf") format('truetype');
+
+}
+
+@font-face {
+  font-family: 'OpenSansCondLight';
+  font-style: normal;
+  font-weight: 400;
+  src:  url("../fonts/OpenSansCondLight.ttf") format('truetype');
+
+}
+
+@font-face {
+  font-family: 'OpenSansCondBold';
+  font-style: normal;
+  font-weight: 400;
+  src:  url("../fonts/OpenSansCondBold.ttf") format('truetype');
+
+}
+
+@font-face {
+  font-family: 'MaidenOrange';
+  font-style: normal;
+  font-weight: 400;
+  src:  url("../fonts/MaidenOrange.ttf") format('truetype');
+
+}
